@@ -1,0 +1,9 @@
+{
+  "TopicName": "lhq@YHan",
+  "ClientID": "5201314",
+  "UserName": "lhq",
+  "Password": "jiangyuhan520",
+  "Port": 9669,
+  "MaxReconnectionCount": 5,
+  "serverIp": "127.0.0.1"
+}
