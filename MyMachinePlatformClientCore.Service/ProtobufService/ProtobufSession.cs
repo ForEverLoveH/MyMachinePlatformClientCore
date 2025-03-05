@@ -7,8 +7,13 @@ namespace MyMachinePlatformClientCore.Service.ProtobufService;
 
  public   class ProtobufSession
  {
-
+    /// <summary>
+    /// 
+    /// </summary>
      private static Dictionary<string, Type> _registry = new Dictionary<string, Type>();
+    /// <summary>
+    /// 
+    /// </summary>
      private static Dictionary<int, Type> mDict1 = new Dictionary<int, Type>();
      private static Dictionary<Type, int> mDict2 = new Dictionary<Type, int>();
 

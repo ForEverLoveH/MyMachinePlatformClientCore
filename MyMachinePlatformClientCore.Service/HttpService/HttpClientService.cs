@@ -22,6 +22,9 @@ public class HttpClientService : IHttpClientService
     {
         this.url = url;
     }
+     
+     
+
 
     /// <summary>
     /// 发送Post请求
@@ -45,8 +48,10 @@ public class HttpClientService : IHttpClientService
             string json = JsonService.CJsonService.SerializeObject<TIn>(obj);
             MyLogTool.ColorLog(MyLogColor.Cyan,
                 string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "请求服务器:{0}，请求内容为：{1}", url, json));
-            if (string.IsNullOrWhiteSpace(json))
+            string result = "";
+            if (!string.IsNullOrWhiteSpace(json))
             {
+                
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls |
                                                        SecurityProtocolType.Tls11 | SecurityProtocolType.Tls13;
@@ -61,43 +66,44 @@ public class HttpClientService : IHttpClientService
                     request.CookieContainer = new CookieContainer();
                     request.CookieContainer.Add(cookieContainer);
                 }
-
                 byte[] bytes = Encoding.UTF8.GetBytes(json);
                 request.ContentLength = bytes.Length;
                 using (Stream requestStream = request.GetRequestStream())
                 { 
                     requestStream.Write(bytes, 0, bytes.Length);
                 }
-
                 using (HttpWebResponse response = (HttpWebResponse) request.GetResponse())
                 {
-                    using (Stream responseStream = response.GetResponseStream())
+                    if (response!=null&& response.StatusCode == HttpStatusCode.OK)
                     {
-                        
-                        using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8))
+                        using (Stream responseStream = response.GetResponseStream())
                         {
-                            if (response.StatusCode == HttpStatusCode.OK)
+
+                            using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8))
                             {
-                                string result = await reader.ReadToEndAsync();
+                                result = await reader.ReadToEndAsync();
                                 MyLogTool.ColorLog(MyLogColor.Cyan,
-                                    string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "服务器返回内容为：{0}",
-                                        result));
-                                return JsonService.CJsonService.DeserializeObject<TOut>(result);
-                            }
-                            else
-                            {
-                                MyLogTool.ColorLog(MyLogColor.Red,
-                                    string.Format("发送post请求服务器:{0}出现错误,错误状态码信息为：{1}", url, response.StatusCode));
-                                return default;
+                                string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "服务器返回内容为：{0}",
+                                        result));  
                             }
                         }
+                    }
+                    else
+                    {
+                        MyLogTool.ColorLog(MyLogColor.Red,
+                            string.Format("发送post请求服务器:{0}出现错误,错误状态码信息为：{1}", url, response.StatusCode));
+                        return default;
                     }
 
                 }
 
             }
+            if (!string.IsNullOrEmpty(result))
+            {
+                return JsonService.CJsonService.DeserializeObject<TOut>(result);
+            }else { return default; }
 
-            return default;
+            
         }
         catch (Exception e)
         {

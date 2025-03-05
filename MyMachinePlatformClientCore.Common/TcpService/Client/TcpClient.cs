@@ -30,12 +30,12 @@ namespace MyMachinePlatformClientCore.Common.TcpService.Client
         /// </summary>
         /// <param name="endpoint">IP endpoint</param>
         public TcpClient(IPEndPoint endpoint) : this(endpoint as EndPoint, endpoint.Address.ToString(), endpoint.Port) { }
-        /// <summary>
-        /// Initialize TCP client with a given endpoint, address and port
-        /// </summary>
-        /// <param name="endpoint">Endpoint</param>
-        /// <param name="address">Server address</param>
-        /// <param name="port">Server port</param>
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="endpoint"></param>
+         /// <param name="address"></param>
+         /// <param name="port"></param>
         private TcpClient(EndPoint endpoint, string address, int port)
         {
             Id = Guid.NewGuid();
