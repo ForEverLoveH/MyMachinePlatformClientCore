@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.30.0-rc1" />
+      <PackageReference Include="HslCommunication" Version="12.2.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.1.25080.5" />
+      <PackageReference Include="MQTTnet" Version="5.0.1.1416" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="NModbus" Version="3.0.81" />
+      <PackageReference Include="Prism.Core" Version="9.0.537" />
+      <PackageReference Include="System.IO.Ports" Version="9.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MyMachinePlatformClientCore.Common\MyMachinePlatformClientCore.Common.csproj" />
+      <ProjectReference Include="..\MyMachinePlatformClientCore.IService\MyMachinePlatformClientCore.IService.csproj" />
+      <ProjectReference Include="..\MyMachinePlatformClientCore.Log\MyMachinePlatformClientCore.Log.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ModbusDriver\ModbusRTU\Client\" />
+    </ItemGroup>
+
+</Project>
