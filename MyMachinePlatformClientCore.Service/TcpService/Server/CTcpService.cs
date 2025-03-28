@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using Google.Protobuf;
 using MyMachinePlatformClientCore.Common.TcpService.Server;
+using MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter;
 using MyMachinePlatformClientCore.Service.ProtobufService;
 using Newtonsoft.Json;
 
@@ -56,21 +57,31 @@ public class CTcpService:TcpService
     #region  json 发送
 
     /// <summary>
-    /// 
+    /// 发送T Data数据，数据格式为 type+ json 数据
     /// </summary>
     /// <param name="data"></param>
     /// <typeparam name="T"></typeparam>
     public void CSendJsonData<T>(T data) where T : class
     {
+        string  name = typeof(T).Name;
+        var pl = typeof(CMessageType).GetEnumNames();
+        int type=0;
+        if (pl.Contains(name))
+        {
+            var filed = typeof(CMessageType).GetField(name);
+            if(filed!=null)
+                type = (int)filed.GetValue(null);
+        }
         if (data == null) return;
         string json = JsonConvert.SerializeObject(data);
+        json = $"{type}{json}";
         CSendJsonData(json);
     }
     /// <summary>
     /// 
     /// </summary>
     /// <param name="json"></param>
-    public void CSendJsonData(string json)
+    private void CSendJsonData(string json)
     {
         if (!string.IsNullOrEmpty(json))
         {
@@ -85,7 +96,7 @@ public class CTcpService:TcpService
     /// 
     /// </summary>
     /// <param name="message"></param>
-    public void CSendJsonData(byte[] message)
+    private void CSendJsonData(byte[] message)
     {
         int length = message.Length;
         byte[] buffer = BitConverter.GetBytes(length);
@@ -124,7 +135,7 @@ public class CTcpService:TcpService
     /// 
     /// </summary>
     /// <param name="message"></param>
-    public void  CSendProtobufData(byte[] message)
+    private void  CSendProtobufData(byte[] message)
     {
         int length = message.Length;
         byte[] buffer = BitConverter.GetBytes(length);

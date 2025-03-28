@@ -104,7 +104,7 @@ namespace MyMachinePlatformClientCore.Service.ProtobufService;
      /// <param name="byteArray"></param>
      /// <param name="type"></param>
      /// <returns></returns>
-     /// <exception cref="ArgumentException"></exception>
+     
      public static IMessage DeserializeByteArray(byte[] byteArray, Type type)
      {
          if (type.IsClass && typeof(IMessage).IsAssignableFrom(type))
