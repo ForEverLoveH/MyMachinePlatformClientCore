@@ -6,8 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MyMachinePlatformClientCore.Log.MyLogs;
 
-namespace MyMachinePlatformClientCore.Summer.Managers
+namespace MyMachinePlatformClientCore.Service.Managers
 {
     /// <summary>
     /// tcp client 服务管理
@@ -30,12 +31,19 @@ namespace MyMachinePlatformClientCore.Summer.Managers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ipaddress"></param>
-        /// <param name="port"></param>
-        /// <param name="isJson"></param>
-        public CTcpClientServiceManager(string ipaddress, int port,bool isJson=false):this(IPAddress.Parse(ipaddress), port,isJson)
+        private Action<LogMessage> logMessageCallBack;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsConnected
         {
+            get => tcpClient?.IsConnected ?? false;
+        }
 
+        public bool IsJson
+        {
+            get => tcpClient.IsJson;
         }
         /// <summary>
         /// 
@@ -43,9 +51,19 @@ namespace MyMachinePlatformClientCore.Summer.Managers
         /// <param name="ipaddress"></param>
         /// <param name="port"></param>
         /// <param name="isJson"></param>
-        public CTcpClientServiceManager(IPAddress ipaddress, int port,bool isJson=false)
+        public CTcpClientServiceManager(string ipaddress, int port,bool isJson=false,Action<LogMessage>logMessageCallBack= null):this(IPAddress.Parse(ipaddress), port,isJson,logMessageCallBack)
         {
-
+                
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ipaddress"></param>
+        /// <param name="port"></param>
+        /// <param name="isJson"></param>
+        public CTcpClientServiceManager(IPAddress ipaddress, int port,bool isJson=false,Action<LogMessage>logMessageCallBack= null)
+        {
+            this.logMessageCallBack = logMessageCallBack;
         }
         /// <summary>
         /// 

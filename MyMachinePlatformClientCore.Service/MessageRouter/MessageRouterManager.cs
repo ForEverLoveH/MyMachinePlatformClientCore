@@ -28,7 +28,6 @@ namespace MyMachinePlatformClientCore.Service.message_router
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="isJson"></param>
         /// <param name="threadCount"></param>
         /// <param name="type"> </param>
         public MessageRouterManager( int threadCount, int type=0)

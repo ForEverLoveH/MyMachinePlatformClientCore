@@ -14,6 +14,9 @@ public class CRun
     /// 
     /// </summary>
     private Task _task;
+    /// <summary>
+    /// 
+    /// </summary>
 
     private string taskName;
     

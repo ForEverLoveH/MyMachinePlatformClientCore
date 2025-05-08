@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyMachinePlatformClientCore.Log.MyLogs;
 
-namespace MyMachinePlatformClientCore.Summer.Managers
+namespace MyMachinePlatformClientCore.Service.Managers
 {
     /// <summary>
     /// 
@@ -17,6 +18,15 @@ namespace MyMachinePlatformClientCore.Summer.Managers
         /// 
         /// </summary>
         private ModbusTcpService _ModbusTcpServer;
+        /// <summary>
+        /// 
+        /// </summary>
+        private Action<LogMessage> _logDataCallBack;
+
+        public CMyModbusServiceManagers(Action<LogMessage> logDataCallBack= null)
+        {
+            this._logDataCallBack = logDataCallBack;
+        }
         /// <summary>
         /// 链接类型 0 表示rtu 链接 1 表示 tcp链接
         /// </summary>
@@ -31,7 +41,7 @@ namespace MyMachinePlatformClientCore.Summer.Managers
         public void StartMyModbusTcpService(string ipAddress, int port)
         {
             type = 1;
-            _ModbusTcpServer = new ModbusTcpService(ipAddress, port);
+            _ModbusTcpServer = new ModbusTcpService(ipAddress, port,_logDataCallBack);
             _ModbusTcpServer.StartService();
         }
         /// <summary>
@@ -53,7 +63,7 @@ namespace MyMachinePlatformClientCore.Summer.Managers
         public void StartMyModbusRTUService(string PortName, int BaudRate, int DataBits,
           System.IO.Ports.StopBits StopBits, System.IO.Ports.Parity Parity, int WriteTimeout = 200, int ReadTimeout = 200)
         {
-            _ModbusRTUServer = new ModbusRTUService();
+            _ModbusRTUServer = new ModbusRTUService(_logDataCallBack);
             type = 0;
             _ModbusRTUServer.Connection(PortName, BaudRate, DataBits, StopBits, Parity, WriteTimeout, ReadTimeout);
         }

@@ -1,8 +1,9 @@
 using MyMachinePlatformClientCore.IService.IMqttService;
+using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.JsonService;
 using MyMachinePlatformClientCore.Service.MQTTService;
 
-namespace MyMachinePlatformClientCore.Summer.Managers;
+namespace MyMachinePlatformClientCore.Service.Managers;
 /// <summary>
 /// 
 /// </summary>
@@ -21,9 +22,18 @@ public class MqttClientBase
 /// </summary>
 public class CMqttServiceManager
 {
+    /// <summary>
+    /// 
+    /// </summary>
     private   IMqttClientService _mqttClientService;
-    
-    
+    /// <summary>
+    /// 
+    /// </summary>
+    private Action<string> _RecieveDataFromMqttClientCallBack;
+
+    private Action<LogMessage> _LogMessageDataFromMqttClientCallBack;
+
+
     private  string _topicName;
 
     public string TopicName
@@ -46,9 +56,11 @@ public class CMqttServiceManager
     /// <summary>
     /// 
     /// </summary>
-    public CMqttServiceManager()
+    public CMqttServiceManager(Action<string> RecieveDataFromMqttClientCallBack=null,Action<LogMessage> __LogMessageDataFromMqttClientCallBack=null)
     {
         mqttConfigPath=Path.Combine(AppContext.BaseDirectory,"/Config/mqttClientConfig.json");
+        this._RecieveDataFromMqttClientCallBack = RecieveDataFromMqttClientCallBack;
+        this._LogMessageDataFromMqttClientCallBack = __LogMessageDataFromMqttClientCallBack;
         ReadMqttConfigFile();
     }
     /// <summary>
@@ -72,17 +84,17 @@ public class CMqttServiceManager
     /// <summary>
     /// 
     /// </summary>
-    public async void StartMqttClientService()
+    public async Task<bool> StartMqttClientService()
     {
         _mqttClientService = new MqttClientService(this._clientID,this._userName,this._password,this._serverIP,this._port,this._maxReconnectCount,this._topicName,
             message =>
             {
-                RecieveDataFromMqttClientService(message);
+               _RecieveDataFromMqttClientCallBack?.Invoke(message);
             }, mess =>
             {
-                LogMessageDataFromMqttClientService(mess);
+               _LogMessageDataFromMqttClientCallBack?.Invoke(mess);
             });
-        await _mqttClientService.StartService();
+       return await _mqttClientService.StartService();
     }
     /// <summary>
     /// 
@@ -104,20 +116,6 @@ public class CMqttServiceManager
          if(!string.IsNullOrEmpty(topicNames))this._topicName = topicNames;
          await _mqttClientService.SendMessage(message,_topicName);
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    private void LogMessageDataFromMqttClientService(string message)
-    {
-         
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    private void RecieveDataFromMqttClientService(string message)
-    {
-         
-    }
+   
+   
 }

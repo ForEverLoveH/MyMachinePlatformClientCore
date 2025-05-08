@@ -1,15 +1,18 @@
-using MyMachinePlatformClientCore.Summer.Managers;
+ 
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Drawing.Color;
 using FontStyle = System.Drawing.FontStyle;
+using HandyControl.Controls;
+using MyMachinePlatformClientCore.Managers;
 
 
 namespace MyMachinePlatformClientCore.ViewModels;
@@ -19,13 +22,16 @@ namespace MyMachinePlatformClientCore.ViewModels;
  /// </summary>
  public class LoginWindowViewModel: BindableBase
  {
+    /// <summary>
+    /// 
+    /// </summary>
     private CMachineManager machineManagers;
     /// <summary>
     /// 登录窗口视图模型
     /// </summary>
     /// <param name="managers"></param>
     /// <param name="userService"></param>
-     public LoginWindowViewModel( CMachineManager machineManager)
+     public LoginWindowViewModel(CMachineManager machineManager)
      {
          this.machineManagers = machineManager;
         // this.userService = userService;
@@ -83,9 +89,27 @@ namespace MyMachinePlatformClientCore.ViewModels;
          get =>
          loginCommand ??= new DelegateCommand<object>(async (obj) =>
          {
-              
+             if (string.IsNullOrEmpty(this.userName) || string.IsNullOrEmpty(this.password) || string.IsNullOrEmpty(this.verficationCode))
+             {
+                 HandyControl.Controls.MessageBox.Show("用户名、密码和验证码不能为空");
+                 return;
+             }
+             else
+             {
+                 if(currentCode!=verficationCode)
+                 {
+                     HandyControl.Controls.MessageBox.Show("验证码错误,请重新输入！！");
+                     return;
+                 }
+                 else
+                 {
+                    var res =  await machineManagers.LoginAsync(userName, password);
+                 }
+             }
+
          });
      }
+    private string currentCode = "";
     /// <summary>
     /// 
     /// </summary>
@@ -112,8 +136,10 @@ namespace MyMachinePlatformClientCore.ViewModels;
      private void CreateVerficationImage(int hei,int wei)
      {
          string txt = GenerateRandomTxt();
+         currentCode = txt;
          //this.verficationCode = txt;
-         byte[] img = GenerateCatchaImage(txt, hei, wei);
+         string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images/5.png");
+         byte[] img = GenerateCatchaImage(txt, hei, wei,path);
          BitmapImage image = new BitmapImage();
          image.BeginInit();
          image.StreamSource = new MemoryStream(img);
@@ -157,21 +183,31 @@ namespace MyMachinePlatformClientCore.ViewModels;
      /// <param name="hei"></param>
      /// <param name="wei"></param>
      /// <returns></returns>
-     private byte[] GenerateCatchaImage(string txt,int hei,int wei)
+     private byte[] GenerateCatchaImage(string txt,int hei,int wei,string backGroundImagePath = "")
      {
-             using (Bitmap  bitmap = new Bitmap(wei,hei))
-             {
-                 using (Graphics g= Graphics.FromImage(bitmap ))
-                 {
-                     g.Clear(Color.White);
-                     Font font = new Font("Arial", 20, FontStyle.Bold);
-                     SolidBrush brush = new SolidBrush(Color.Black);
-                     g.DrawString(txt, font, brush, 5, 5); // 绘制文字
-                     MemoryStream stream = new MemoryStream();
-                     bitmap.Save(stream, ImageFormat.Png);
-                     return stream.ToArray();
-                     
-                 }
-             }
-     }
+        using (Bitmap bitmap = new Bitmap(wei, hei))
+        {
+            
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                using (System.Drawing.Image backGroundImage = System.Drawing.Image.FromFile(backGroundImagePath))
+                {                   
+                     g.DrawImage(backGroundImage,  new Rectangle(0, 0, wei, hei));      
+                }
+                g.Clear(Color.White);
+                Font font = new Font("Arial", 20, FontStyle.Bold);
+                SolidBrush brush = new SolidBrush(Color.Black);
+                SizeF txtSize = g.MeasureString(txt, font);
+                float x = (wei - txtSize.Width) / 2;
+                float y = (hei - txtSize.Height) / 2;
+                g.DrawString(txt, font, brush, x, y); // 绘制文字
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    bitmap.Save(stream, ImageFormat.Png);
+                    return stream.ToArray();
+                }
+
+            }
+        }
+    }
  }

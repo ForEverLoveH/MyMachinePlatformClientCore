@@ -1,7 +1,8 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
-using MyMachinePlatformClientCore.Summer.Managers;
+using MyMachinePlatformClientCore.Managers;
+using MyMachinePlatformClientCore.Summer.MyIOCContainer;
 using MyMachinePlatformClientCore.Views;
 
 namespace MyMachinePlatformClientCore;

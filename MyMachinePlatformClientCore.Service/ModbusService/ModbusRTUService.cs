@@ -16,6 +16,9 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
     public class ModbusRTUService
     {
 
+        private Action<LogMessage> _logDataCallBack;
+
+        private string portName;
         /// <summary>
         /// 
         /// </summary>
@@ -29,6 +32,10 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
         /// </summary>
         private IModbusSerialMaster rtuMaster;
 
+        public ModbusRTUService(Action<LogMessage> logDataCallBack=null)
+        {
+            this._logDataCallBack = logDataCallBack;
+        }
         /// <summary>
         ///  RTU连接
         /// </summary>
@@ -47,6 +54,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             {
                 SPort = new SerialPort();
                 SPort.PortName = PortName;
+                this.portName= PortName;
                 SPort.BaudRate = BaudRate;
                 SPort.DataBits = DataBits;
                 SPort.Parity = Parity;
@@ -58,11 +66,13 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
                 var factory = new ModbusFactory();
                 rtuMaster = factory.CreateRtuMaster((NModbus.IO.IStreamResource)SPort);
                 IsConnection = true;
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success, $"串口{PortName}连接成功"));
                 return true;
             }
             catch (Exception ex)
             {
                 IsConnection = false;
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"串口{PortName}连接失败,异常信息为{ex.Message}"));
                 return false;
             }
         }
@@ -123,7 +133,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             }
             catch (Exception e)
             {
-                MyLogTool.ColorLog(MyLogColor.Red,"modbus服务写入异常，信息为："+e.Message+"\n");
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"往串口{portName}写入数据失败,异常信息为{e.Message}"));
                 return; 
             }
         }
@@ -169,7 +179,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             }
             catch (Exception e)
             {
-                MyLogTool.ColorLog(MyLogColor.Cyan,"ModbusRTUService.ReadData", e);
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"从串口{portName}读取数据失败,异常信息为{e.Message}"));
             }
             return (coilsBuffer, registerBuffer);
         }

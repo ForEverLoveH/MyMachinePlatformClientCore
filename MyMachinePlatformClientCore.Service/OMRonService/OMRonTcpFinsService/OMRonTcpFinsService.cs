@@ -12,6 +12,8 @@ public class OMRonTcpFinsService
      [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern uint GetTickCount();
 
+        private Action<LogMessage> _LogDataCallBack;
+
         public uint NewTime
         {
             get { return GetTickCount(); }
@@ -139,7 +141,10 @@ public class OMRonTcpFinsService
             }
         }
         
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="task"></param>
         private void AddImmeTask(TaskStructTCPFINS task)
         {
             lock (m_critSecImmeList)
@@ -153,7 +158,9 @@ public class OMRonTcpFinsService
                 m_hImmeTaskEvent.Set();
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         private void ProcessImmeTask()
         {
             bool rst = false;
@@ -191,7 +198,9 @@ public class OMRonTcpFinsService
             }
         }
 
-        // Use this in serve thread
+       /// <summary>
+       ///  Use this in serve thread
+       /// </summary>
         private void ProcessPeriodTask()
         {
             if (m_periodTaskList == null)
@@ -224,7 +233,13 @@ public class OMRonTcpFinsService
                 }
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="unBeginWord"></param>
+        /// <param name="unWordsCount"></param>
+        /// <returns></returns>
         public bool AddReadArea(MemAreaTCPFINS area, int unBeginWord, uint unWordsCount)
         {
             TaskStructTCPFINS task = new TaskStructTCPFINS();
@@ -250,7 +265,12 @@ public class OMRonTcpFinsService
             return true;
         }
 
-        bool SendAndGetRes(TaskStructTCPFINS pTask)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pTask"></param>
+        /// <returns></returns>
+        private  bool SendAndGetRes(TaskStructTCPFINS pTask)
         {
             try
             {
@@ -379,10 +399,11 @@ public class OMRonTcpFinsService
         /// <summary>
         /// 构造函数
         /// </summary>
-        public OMRonTcpFinsService()
+        public OMRonTcpFinsService(Action<LogMessage>logDataCallBack=null)
         {
             this._ping = new Ping();
             this._endPoint = new IPEndPoint(0, 0);
+            this._LogDataCallBack = logDataCallBack;
         }
          /// <summary>
         /// set ip and port
@@ -425,7 +446,10 @@ public class OMRonTcpFinsService
                 return false;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool Connect()
         {
             if (this.Connected == true && this.initConnect == true)
@@ -575,7 +599,12 @@ public class OMRonTcpFinsService
             {
                 string msg = string.Format("Sending error. (Expected bytes: {0}  Sent: {1})"
                                             , cmdLen, bytesSent);
-                throw new Exception(msg);
+                _LogDataCallBack?.Invoke( new LogMessage()
+                {
+                    _LogType = LogType.Warm,
+                    message = msg,
+                });
+                
             }
             return bytesSent;
         }
@@ -602,12 +631,22 @@ public class OMRonTcpFinsService
             {
                 string msg = string.Format("Receiving error. (Expected: {0}  Received: {1})"
                                             , respLen, bytesRecv);
-                throw new Exception(msg);
+               _LogDataCallBack?.Invoke(new LogMessage()
+               {
+                   _LogType = LogType.Warm,
+                   message = msg
+               });
             }
             return bytesRecv;
         }
-        
-          public bool ReadPLCBit(MemAreaTCPFINS area, uint unBeginWord, int bit)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="unBeginWord"></param>
+        /// <param name="bit"></param>
+        /// <returns></returns>
+        public bool ReadPLCBit(MemAreaTCPFINS area, uint unBeginWord, int bit)
         {
             short result = 0;
             result = GetReadWord(area, unBeginWord);
@@ -616,7 +655,14 @@ public class OMRonTcpFinsService
             else
                 return false;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="unBeginWord"></param>
+        /// <param name="bit"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public bool ReadPLCBit(MemAreaTCPFINS area, uint unBeginWord, int bit, out uint time)
         {
             short result = 0;
@@ -627,7 +673,12 @@ public class OMRonTcpFinsService
             else
                 return false;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="unBeginWord"></param>
+        /// <returns></returns>
         public short ReadPLCShort(MemAreaTCPFINS area, uint unBeginWord)
         {
             return GetReadWord(area, unBeginWord);
@@ -1440,43 +1491,4 @@ public class OMRonTcpFinsService
             return TimeStamp1;
         }
     }
-
-    /// <summary>
-    /// MES接口/数据库端口状态监控
-    /// </summary>
-    public class MESORSQLConnect
-    {
-        public static bool connected = false;
-
-        public bool TestConnection(string host, int port)
-        {
-            int millisecondsTimeout = 5;//等待时间
-            TcpClient client = new TcpClient();
-            try
-            {
-                var ar = client.BeginConnect(host, port, null, null);
-                ar.AsyncWaitHandle.WaitOne(millisecondsTimeout);
-                connected = client.Connected;
-                return connected;
-            }
-            catch (Exception e)
-            {
-                connected = false;
-                client.Close();
-                return connected;
-            }
-            finally
-            {
-                client.Close();
-            }
-        }
-
-        public bool Connected
-        {
-            get
-            {
-                return connected;
-            }
-        }
-
-}
+    

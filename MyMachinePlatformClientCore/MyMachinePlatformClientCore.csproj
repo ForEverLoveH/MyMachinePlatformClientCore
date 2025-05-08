@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\MyMachinePlatformClientCore.Models\MyMachinePlatformClientCore.Models.csproj" />
       <ProjectReference Include="..\MyMachinePlatformClientCore.Summer\MyMachinePlatformClientCore.Summer.csproj" />
     </ItemGroup>
 
@@ -50,6 +51,12 @@
       <Resource Include="Images\背景界面.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsetting.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

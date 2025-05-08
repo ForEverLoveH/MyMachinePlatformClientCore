@@ -1,4 +1,6 @@
 using MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter;
+using System;
+using System.Reflection;
 
 namespace MyMachinePlatformClientCore.Service.message_router;
 
@@ -29,6 +31,28 @@ public class JsonMessage
     public Rsp_Register rsp_Register { get; set; }
 
     public Rsp_HeartBeat rsp_HeartBeat { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static JsonMessage ConvertToJsonMessage<T>(T request) where T : class
+    {
+        JsonMessage jsonMessage = new JsonMessage();
+        Type type = typeof(T);
+        string name = type.Name;
+        Type types = typeof(JsonMessage);
+        var properties = type.GetProperties().ToList();
+        var property = properties.Find(a=>a.PropertyType==type);
+        if (property == null) return null;
+        property.SetValue(jsonMessage, request);
+        return jsonMessage;
+        
+        
+    }
+    
+    
 }
 #region 请求
 public class Req_HeartBeat

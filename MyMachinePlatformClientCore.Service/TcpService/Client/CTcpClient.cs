@@ -13,28 +13,47 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore.Service
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CTcpClient : Common.TcpService.Client.TcpClient
     {
         private bool _stop;
         private bool isJson = false;
+        
+        private Action<LogMessage> _logDataCallBack;
+        
+
+        public bool IsJson
+        {
+            get => isJson;
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ipaddress"></param>
         /// <param name="port"></param>
-        public CTcpClient(string ipaddress, int port, bool isJson = false) : base(ipaddress, port)
+        public CTcpClient(string ipaddress, int port, bool isJson = false,Action<LogMessage>logDataCallBack=null) : base(ipaddress, port)
         {
-
+            this.isJson = isJson;
+            _logDataCallBack = logDataCallBack;
         }
-
-        public CTcpClient(IPEndPoint ipEndPoint, bool isJson = false) : base(ipEndPoint)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ipEndPoint"></param>
+        /// <param name="isJson"></param>
+        /// <param name="logDataCallBack"></param>
+        public CTcpClient(IPEndPoint ipEndPoint, bool isJson = false,Action<LogMessage>logDataCallBack=null) : base(ipEndPoint)
         {
-
+            this.isJson = isJson;
+            _logDataCallBack = logDataCallBack;
         }
 
         protected override void OnConnected()
         {
-            MyLogTool.ColorLog(MyLogColor.Green, $"Chat TCP client connected a new session with Id {Id}");
+            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Info,$" tcp 客户端服务器已连接，当前的guid为 {Id}"));
+             
             StartHeartBeatService();
         }
 
@@ -44,7 +63,8 @@ namespace MyMachinePlatformClientCore.Service
         /// </summary>
         protected override void OnDisconnected()
         {
-            MyLogTool.ColorLog(MyLogColor.Blue, $"Chat TCP client disconnected a session with Id {Id}");
+            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Info,$" tcp 客户端服务器已断开连接，当前的guid为 {Id}"));
+           
             // Wait for a while...
             Thread.Sleep(1000);
             // Try to connect again
@@ -190,10 +210,10 @@ namespace MyMachinePlatformClientCore.Service
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
-        public void CSendProtobufData<T>(T data) where T : IMessage<T>
+        public bool CSendProtobufData<T>(T data) where T : IMessage<T>
         {
             //RSAService rsa = new RSAService();
-            if (data == null) return;
+            if (data == null) return  false;
             int code = ProtobufSession.SeqCode(data.GetType());
             byte[] typeCode = BitConverter.GetBytes(code);
             byte[] message = ProtobufSession.Serialize(data);
@@ -202,13 +222,13 @@ namespace MyMachinePlatformClientCore.Service
             byte[] m = mess.Concat(waterCode).ToArray();
             byte[] crc = BitConverter.GetBytes(CRCService.ComputeChecksum(m));
             byte[] result = m.Concat(crc).ToArray();
-            CSendProtobufData(result);
+           return  CSendProtobufData(result);
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
-        public void CSendProtobufData(byte[] message)
+        public bool CSendProtobufData(byte[] message)
         {
             int length = message.Length;
             byte[] buffer = BitConverter.GetBytes(length);
@@ -219,7 +239,11 @@ namespace MyMachinePlatformClientCore.Service
                     Array.Reverse(buffer);
                 }
                 byte[] result = buffer.Concat(message).ToArray();
-                Send(result);
+               return    SendAsync(result);
+            }
+            else
+            {
+                return false;
             }
         }
         #endregion
@@ -234,6 +258,7 @@ namespace MyMachinePlatformClientCore.Service
         /// </summary>
         private void StartHeartBeatService()
         {
+            
             //ClientMessageRouter.GetInstance().OnMessage<HeartBeatResponse>(_HeartBeatResponse);
             _heartBeatTimer = new Timer(_TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         }
@@ -250,7 +275,7 @@ namespace MyMachinePlatformClientCore.Service
         //    string pll = $"网络延迟: {po}ms";
         //}
 
-        //private HeartBeatRequest _heartBeatRequest = new HeartBeatRequest();
+        private HeartBeatRequest _heartBeatRequest = new HeartBeatRequest();
         ///// <summary>
         ///
         /// </summary>
@@ -261,7 +286,12 @@ namespace MyMachinePlatformClientCore.Service
         /// <param name="state"></param>
         private void _TimerCallback(object state)
         {
-            //CSendProtobufData(_heartBeatRequest);
+            if(isJson==false) CSendProtobufData(_heartBeatRequest);
+            else
+            {
+                
+            }
+            
             lastBeatTime = DateTime.MinValue;
         }
         #endregion

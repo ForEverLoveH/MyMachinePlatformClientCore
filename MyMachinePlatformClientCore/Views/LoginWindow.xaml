@@ -44,27 +44,55 @@
                          
                          <Grid Grid.Row="1" Grid.Column="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <hc:TextBox   hc:InfoElement.Placeholder="请输入你的用户名信息..." hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="用户名：" hc:InfoElement.Necessary="true" Style="{StaticResource TextBoxExtend}" Name="TextContent" Margin="5,10,10,10" MinWidth="250" Text="{Binding UserName}" MinHeight="40"/>
+                                    <hc:TextBox   hc:InfoElement.Placeholder="请输入你的用户名信息..." hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="用户名：" hc:InfoElement.Necessary="true" Style="{StaticResource TextBoxExtend}" Name="TextContent" Margin="5,10,10,10" MinWidth="450" Text="{Binding UserName}" MinHeight="40"   Foreground="White" FontStyle="Normal">
+                                        <hc:TextBox.Background>
+                                            <ImageBrush ImageSource="/Images/4.png"/>
+                                        </hc:TextBox.Background>
+
+                                    </hc:TextBox>
                                 </StackPanel>
                          </Grid>
                          <Grid Grid.Row="2" Grid.Column="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <hc:TextBox    hc:InfoElement.Placeholder="       请输入你的密码信息..." hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="密码：" hc:InfoElement.Necessary="true" Style="{StaticResource TextBoxExtend}" Name="PassContent" Margin="5,10,10,10" MinWidth="250" Text="{Binding Password}" MinHeight="40"/>
-                             </StackPanel>
+                                    <hc:TextBox    hc:InfoElement.Placeholder=" 请输入你的密码信息..." hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="密码：" hc:InfoElement.Necessary="true" Style="{StaticResource TextBoxExtend}" Name="PassContent" Margin="5,10,10,10" MinWidth="450" Text="{Binding Password}" MinHeight="40" Foreground="White" FontStyle="Normal">
+                                        <hc:TextBox.Background>
+                                            <ImageBrush ImageSource="/Images/4.png"/>
+                                        </hc:TextBox.Background>
+
+                                    </hc:TextBox>
+                                    
+                                </StackPanel>
                          </Grid>
                          <Grid Grid.Row="3" Grid.Column="1">
-                             <StackPanel Orientation="Horizontal">
-                                    <hc:TextBox   hc:InfoElement.Placeholder="请输入验证码..." hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="用户名："    hc:InfoElement.Necessary="true" Style="{StaticResource TextBoxExtend}" Name="verficationCodeTxt" Margin="5,10,10,10" MinWidth="250" Text="{Binding VerficationCode}" MinHeight="40" />
-                                    <Image  x:Name="verficationImages" Source="{Binding VerficationCodeImage }" Stretch="Fill" MinWidth="200"   MinHeight="60"  >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <hc:TextBox   hc:InfoElement.Placeholder="请输入验证码..." hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="验证码："    hc:InfoElement.Necessary="true" Style="{StaticResource TextBoxExtend}" Name="verficationCodeTxt" Margin="5,10,10,10" MinWidth="250" Text="{Binding VerficationCode}" MinHeight="40" Foreground="White" FontStyle="Normal">
+                                        <hc:TextBox.Background>
+                                            <ImageBrush ImageSource="/Images/4.png"/>
+                                        </hc:TextBox.Background>
+                                    </hc:TextBox>
+                                    
+                                </Grid>
+                                <Grid Grid.Column="2">
+                                    <Image  x:Name="verficationImages" Source="{Binding VerficationCodeImage }" Stretch="Fill" MinWidth="200"   MinHeight="60" Height="20" Width="142"  >
+                                        <Image.OpacityMask>
+                                            <ImageBrush ImageSource="/Images/5.png"/>
+                                        </Image.OpacityMask>
+
                                         <behaviors:Interaction.Triggers>
                                             <behaviors:EventTrigger EventName="MouseLeftButtonDown" >
                                                 <behaviors:InvokeCommandAction Command="{Binding RefreshVerficationCodeCommand}" CommandParameter="{Binding  RelativeSource={RelativeSource Self}}"/>
                                             </behaviors:EventTrigger>
                                         </behaviors:Interaction.Triggers>
-                                            
-                                 </Image>
-                             </StackPanel>
-                         </Grid>
+
+                                    </Image>
+                                </Grid>
+                            </Grid>
                          <Grid Grid.Row=" 4" Grid.Column="1">
                              <Grid.ColumnDefinitions>
                                  <ColumnDefinition Width="50*"/>

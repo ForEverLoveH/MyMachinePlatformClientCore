@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyMachinePlatformClientCore.Summer.Managers
+namespace MyMachinePlatformClientCore.Service.Managers
 {
     public class CHttpClientServiceManager
     {

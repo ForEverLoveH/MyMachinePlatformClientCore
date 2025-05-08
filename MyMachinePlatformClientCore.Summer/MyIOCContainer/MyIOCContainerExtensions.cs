@@ -48,5 +48,7 @@ public   static class MyIOCContainerExtensions
     public static void MyRegisterInstance<TEntityService>(this IContainerRegistry registry,TEntityService service) where TEntityService : class
     {
         registry.RegisterInstance(service);
+         
     }
+
 }

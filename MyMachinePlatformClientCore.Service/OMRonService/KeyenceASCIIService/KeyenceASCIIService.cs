@@ -7,7 +7,7 @@ using MyMachinePlatformClientCore.Log.MyLogs;
 
 namespace MyMachinePlatformClientCore.Service.OMRonService ;
 
- public class KeyenceASCII
+ public class KeyenceASCIIService
     {
         [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern uint GetTickCount();
@@ -113,7 +113,7 @@ namespace MyMachinePlatformClientCore.Service.OMRonService ;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public KeyenceASCII()
+        public KeyenceASCIIService()
         {
             // used to ping the PLC
             //

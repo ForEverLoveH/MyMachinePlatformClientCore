@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.FTPService;
 using MyMachinePlatformClientCore.Service.JsonService;
 
-namespace MyMachinePlatformClientCore.Summer.Managers
+namespace MyMachinePlatformClientCore.Service.Managers
 {
     public class FtpBaseInfo
     {
@@ -39,8 +40,13 @@ namespace MyMachinePlatformClientCore.Summer.Managers
         /// <summary>
         /// 
         /// </summary>
-        public CFtpServiceManager()
+        private Action<LogMessage> _logDataCallBack;
+        /// <summary>
+        /// 
+        /// </summary>
+        public CFtpServiceManager(Action<LogMessage>logDataCallBack=null)
         {
+            this._logDataCallBack = logDataCallBack;
             ReadFtpServiceConfig();
         }
 
@@ -57,7 +63,7 @@ namespace MyMachinePlatformClientCore.Summer.Managers
                   this._ftpServerPort = info.FtpServerPort;
                   this._ftpUserName = info.FtpUserName;
                   this._ftpPassword = info.FtpPassword;
-                  clientService = new FTPClientService(_ftpServerIp, _ftpServerPort, _ftpUserName, _ftpPassword);
+                  clientService = new FTPClientService(_ftpServerIp, _ftpServerPort, _ftpUserName, _ftpPassword, _logDataCallBack);
               }
         }
         /// <summary>

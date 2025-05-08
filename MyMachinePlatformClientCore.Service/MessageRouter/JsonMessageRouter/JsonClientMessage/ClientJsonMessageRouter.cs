@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MyMachinePlatformClientCore.Service.message_router;
-
 namespace MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter
 {
     /// <summary>
@@ -72,8 +71,6 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter
             }
         }
          
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -140,6 +137,7 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter
             catch (Exception ex)
             {
                 MyLogTool.ColorLog(MyLogColor.Red, "消息处理发生异常，异常信息为：" + ex.Message);
+                
             }
             finally
             {

@@ -1,0 +1,6 @@
+{
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=localhost;port=3306;user ID = root;pwd=root;database=MMoCore;"
+  }
+}

@@ -21,6 +21,9 @@ public class FTPClientService:IFTPClientService
     /// 
     /// </summary>
     private readonly string _ftpPassword;
+
+
+    private Action<LogMessage > _LogDataCallBack;
     /// <summary>
     /// 
     /// </summary>
@@ -28,12 +31,13 @@ public class FTPClientService:IFTPClientService
     /// <param name="ftpServerPort"></param>
     /// <param name="ftpUserName"></param>
     /// <param name="ftpPassword"></param>
-    public FTPClientService(string ftpServerIp, int ftpServerPort, string ftpUserName, string ftpPassword)
+    public FTPClientService(string ftpServerIp, int ftpServerPort, string ftpUserName, string ftpPassword, Action<LogMessage > logDataCallBack= null)
     {
         this._ftpServerIp = ftpServerIp;
         this._ftpServerPort = ftpServerPort;
         this._ftpUserName = ftpUserName;
         this._ftpPassword = ftpPassword;
+        this. _LogDataCallBack = logDataCallBack;
         
     }
     /// <summary>
@@ -62,7 +66,8 @@ public class FTPClientService:IFTPClientService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"上传文件失败: {ex.Message}");
+            _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"上传文件失败: {ex.Message}"));
+            
             return false; 
         }
     }
@@ -93,12 +98,20 @@ public class FTPClientService:IFTPClientService
             var status = response.StatusCode;
             if (status == FtpStatusCode.CommandOK)
             {
-                Log.MyLogs.MyLogTool.ColorLog(MyLogColor.Cyan,$"上传文件成功: {localFilePath} -> {remoteFilePath}");
+                _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+                    $"上传文件成功: {localFilePath} -> {remoteFilePath}"));
+                 
                 return true;
             }
             return false;
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    
+    
     /// <summary>
     /// 
     /// </summary>
@@ -139,8 +152,10 @@ public class FTPClientService:IFTPClientService
                 bytesUploaded += bytesRead;
             }
         }
+        _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+            $"分段上传文件成功: {localFilePath} -> {remoteFilePath}"));
         // 这里可以添加合并文件块的逻辑，需要服务器端支持
-        Log.MyLogs.MyLogTool.ColorLog(MyLogColor.Cyan,$"分段上传文件成功: {localFilePath} -> {remoteFilePath}");
+        
         return true;
     }
 
@@ -173,7 +188,9 @@ public class FTPClientService:IFTPClientService
 
                 if (response.StatusCode == FtpStatusCode.CommandOK)
                 {
-                    Log.MyLogs.MyLogTool.ColorLog(MyLogColor.Cyan,$"下载文件成功: {remoteFilePath} -> {localFilePath}");
+                    _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,$"下载文件成功: {remoteFilePath} -> {localFilePath}"
+                         ));
+                    
                     return true;
                 }
                 else
@@ -186,8 +203,9 @@ public class FTPClientService:IFTPClientService
         }
         catch (Exception ex)
         {
-            Log.MyLogs.MyLogTool.ColorLog(MyLogColor.Red,$"下载文件失败: {ex.Message}");
-            return false;
+            _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"下载文件失败: {ex.Message}"));
+            
+            return false; 
         }
     }
     
@@ -208,7 +226,9 @@ public class FTPClientService:IFTPClientService
                 var status = response.StatusCode;
                 if (status == FtpStatusCode.CommandOK)
                 {
-                    MyLogTool.ColorLog(MyLogColor.Cyan,$"删除文件成功");
+                    _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,$"删除文件成功"
+                    ));
+                    
                     return true;
                 }   
                 return false; 
