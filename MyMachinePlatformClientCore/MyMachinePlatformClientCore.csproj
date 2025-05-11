@@ -35,6 +35,7 @@
       <None Remove="Images\背景界面.png" />
       <None Remove="Views\2.png" />
       <None Remove="Views\3.png" />
+      <None Remove="Views\背景界面.png" />
       <Resource Include="Images\1.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
@@ -48,9 +49,7 @@
       <Resource Include="Images\4.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Images\背景界面.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
+      <Resource Include="Images\背景界面.png" />
     </ItemGroup>
 
     <ItemGroup>

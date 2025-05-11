@@ -8,24 +8,20 @@
         Title="MainWindow"  Background="Transparent" WindowState="Normal " WindowStartupLocation="CenterScreen" >
     
     <Grid>
-        <MediaElement x:Name="MyMediaElement" LoadedBehavior="Play" UnloadedBehavior="Manual" Stretch="UniformToFill"     />
+         
         <Viewbox Height="1080" Width="1920" Panel.ZIndex="1"  >
-            <Grid  x:Name="mGrid" Visibility="Hidden">
+            <Grid  x:Name="mGrid" Visibility="Hidden" >
                 <Grid.Background>
-                    <ImageBrush ImageSource="../Images/背景界面.png" />
+                    <ImageBrush ImageSource="/Images/背景界面.png" />
                 </Grid.Background>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition Width="150*"/>
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="150*" />
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" >
-                    <ScrollViewer HorizontalAlignment="Center" VerticalAlignment="Center" >
-                       
-                    </ScrollViewer>
-                </Grid>
-                <Grid Grid.Column="1" >
+                <Grid Grid.Column="0">
                     
-                </Grid>
+                 </Grid>
+
             </Grid>
         </Viewbox>
        

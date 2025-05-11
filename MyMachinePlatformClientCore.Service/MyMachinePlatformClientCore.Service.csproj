@@ -11,15 +11,22 @@
       <PackageReference Include="FreeSql.Repository" Version="3.5.205" />
       <PackageReference Include="Google.Protobuf" Version="3.30.0-rc1" />
       <PackageReference Include="HslCommunication" Version="12.2.0" />
+      <PackageReference Include="KCPNet" Version="1.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.3.25171.5" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0-preview.3.25171.5" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-preview.3.25171.5" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.1.25080.5" />
       <PackageReference Include="MQTTnet" Version="5.0.1.1416" />
+      <PackageReference Include="MQTTnet.Server" Version="5.0.1.1416" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="NModbus" Version="3.0.81" />
+      <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
+      <PackageReference Include="OpenCvSharp4.Extensions" Version="4.11.0.20250507" />
+      <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.11.0.20250507" />
       <PackageReference Include="Prism.Core" Version="9.0.537" />
       <PackageReference Include="SqlSugar" Version="5.1.4.192" />
+      <PackageReference Include="StackExchange.Redis" Version="2.8.37" />
+      <PackageReference Include="System.Drawing.Common" Version="9.0.1" />
       <PackageReference Include="System.IO.Ports" Version="9.0.2" />
     </ItemGroup>
 

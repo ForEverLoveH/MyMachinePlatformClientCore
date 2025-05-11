@@ -41,9 +41,9 @@ namespace MyMachinePlatformClientCore.Service.Managers
             get => tcpClient?.IsConnected ?? false;
         }
 
-        public bool IsJson
+        public bool? IsJson
         {
-            get => tcpClient.IsJson;
+            get => tcpClient?.IsJson;
         }
         /// <summary>
         /// 

@@ -1,6 +1,10 @@
  
+using System.Net.Security;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using MQTTnet;
+ 
 using MyMachinePlatformClientCore.IService.IMqttService;
 using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.message_router;
@@ -56,6 +60,11 @@ public class MqttClientService:IMqttClientService
     /// </summary>
     private MqttClientOptionsBuilder _optionsBuilder;
     /// <summary>
+    /// 客户端雨服务端的SSL证书
+    /// </summary>
+
+    private X509Certificate2 _certificate;
+    /// <summary>
     /// 
     /// </summary>
 
@@ -88,9 +97,12 @@ public class MqttClientService:IMqttClientService
     /// <param name="port"></param>
     /// <param name="maxReconnectCount"></param>
     /// <param name="topicName"></param>
+    /// <param name="_certificate">证书</param>
     /// <param name="_recieveMessageCallBack"></param>
     /// <param name="_logMessageCallBack"></param>
-    public MqttClientService(string clientId,string userName,string password,string serverIp,int port,int maxReconnectCount,string topicName,Action<string>_recieveMessageCallBack=null,Action<LogMessage>_logMessageCallBack=null)
+    // 修改参数命名，将可为 null 的引用类型参数标记为可空类型
+    public MqttClientService(string clientId, string userName, string password, string serverIp, int port, int maxReconnectCount, string topicName, X509Certificate2? certificate = null,
+        Action<string>? recieveMessageCallBack = null, Action<LogMessage>? logMessageCallBack = null)
     {
         this.clientID = clientId;
         this.userName = userName;
@@ -98,13 +110,46 @@ public class MqttClientService:IMqttClientService
         this.serverIP = serverIp;
         this.port = port;
         this.topicName = topicName;
-        this.maxReconnectCount =Math.Min(maxReconnectCount,5);
-        this.RecieveMessageCallBack = _recieveMessageCallBack;
-        this.LogMessageCallBack = _logMessageCallBack;
-        _optionsBuilder = new MqttClientOptionsBuilder().WithClientId(clientId).WithTcpServer(serverIP,port).WithCredentials(userName,password).WithTimeout(new TimeSpan(0,0,1000));
-        InitService();
+        this._certificate = certificate;
+        this.maxReconnectCount = Math.Min(maxReconnectCount, 5);
+        this.RecieveMessageCallBack = recieveMessageCallBack;
+        this.LogMessageCallBack = logMessageCallBack;
 
+        // 初始化 _mqttClient 字段
+        _mqttClient = new MqttClientFactory().CreateMqttClient();
+
+        _optionsBuilder = new MqttClientOptionsBuilder().WithClientId(clientId).WithTcpServer(serverIP, port)
+            .WithCredentials(userName, password).WithTimeout(new TimeSpan(0, 0, 1000));
+
+        if (certificate != null)
+        {
+            _optionsBuilder.WithTlsOptions(new MqttClientTlsOptions()
+            {
+                UseTls = true, // 启用 TLS
+                AllowUntrustedCertificates = false, // 不允许不信任的证书
+                IgnoreCertificateChainErrors = false, // 不忽略证书链错误
+                SslProtocol = SslProtocols.Tls12, // 使用 TLS 1.2 协议
+                ClientCertificatesProvider = new DefaultMqttCertificatesProvider(new X509Certificate2Collection(certificate)),
+                CertificateValidationHandler =e=>VerficationCurrentServerCertificate(e),
+                
+            });
+        }
+
+        InitService();
     }
+    /// <summary>
+    /// 验证服务端sll 证书
+    /// </summary>
+    /// <param name="certificate"></param>
+    /// <returns></returns>
+    private bool VerficationCurrentServerCertificate(MqttClientCertificateValidationEventArgs certificate)
+    {
+        //证书
+        var serverCertificate = certificate.Certificate;
+        
+        return true;
+    }
+
     /// <summary>
     /// 
     /// </summary>

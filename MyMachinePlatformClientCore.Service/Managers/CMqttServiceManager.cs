@@ -87,7 +87,7 @@ public class CMqttServiceManager
     public async Task<bool> StartMqttClientService()
     {
         _mqttClientService = new MqttClientService(this._clientID,this._userName,this._password,this._serverIP,this._port,this._maxReconnectCount,this._topicName,
-            message =>
+            null,message =>
             {
                _RecieveDataFromMqttClientCallBack?.Invoke(message);
             }, mess =>

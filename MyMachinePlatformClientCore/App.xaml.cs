@@ -12,19 +12,23 @@ namespace MyMachinePlatformClientCore;
 /// </summary>
 public partial class App : PrismApplication
 {
-    protected override void InitializeShell(Window shell)
-    {
-        var login = Container.Resolve<LoginWindow>();
-        var isLogin = login.ShowDialog();
-        if (isLogin == true)
-        {
-            base.InitializeShell(shell);
-        }
-        else
-        {
-            Current.Shutdown();
-        }
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="shell"></param>
+    //protected override void InitializeShell(Window shell)
+    //{
+    //    var login = Container.Resolve<LoginWindow>();
+    //    var isLogin = login.ShowDialog();
+    //    if (isLogin == true)
+    //    {
+    //        base.InitializeShell(shell);
+    //    }
+    //    else
+    //    {
+    //        Current.Shutdown();
+    //    }
+    //}
 
     /// <summary>
     /// 

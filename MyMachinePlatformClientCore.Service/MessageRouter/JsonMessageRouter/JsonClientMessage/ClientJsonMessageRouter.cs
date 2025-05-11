@@ -94,8 +94,8 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter
             {
                 return;
             }
+
             isRunning = true;
-            this.maxThreadCount = threadCount;
             this.maxThreadCount = Math.Min(Math.Max(threadCount, 1), 200);
             for (int i = 0; i < this.maxThreadCount; i++)
             {

@@ -473,17 +473,17 @@ namespace MyMachinePlatformClientCore.Managers
         {
             StartLogService();
             
-            StartEIPService(_Eipaddress, _Eipport, _EipBindPort);
+            //StartEIPService(_Eipaddress, _Eipport, _EipBindPort);
 
-            StartOMRonTcpFinsService(_finsIpAddress, _finsPort);
+            //StartOMRonTcpFinsService(_finsIpAddress, _finsPort);
 
             StartFtpService();
 
-            StartMqttService().Wait(10);
+            //StartMqttService().Wait(10);
 
             StartMessageRouterService();
 
-            StartTcpService();
+            //StartTcpService();
 
             StartLoginService();
         }

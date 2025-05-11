@@ -2,7 +2,11 @@ namespace MyMachinePlatformClientCore.Summer.MyIOCContainer;
 
 public   static class MyIOCContainerExtensions
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TEntityService"></typeparam>
+    /// <param name="registry"></param>
     public static void MyRegisterType<TEntityService>(this IContainerRegistry registry) where TEntityService : class
     {
         registry.Register<TEntityService>();

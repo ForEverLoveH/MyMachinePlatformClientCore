@@ -151,7 +151,6 @@ namespace MyMachinePlatformClientCore.Service.SqlSugarService
 
         public async Task<int> Delete<T>(Expression<Func<T, bool>> whereLambda) where T : class, new()
         {
-
             return await db.Deleteable<T>().Where(whereLambda).ExecuteCommandAsync();
         }
         /// <summary>
