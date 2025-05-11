@@ -12,6 +12,10 @@ namespace MyMachinePlatformClientCore;
 /// </summary>
 public partial class App : PrismApplication
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="shell"></param>
     protected override void InitializeShell(Window shell)
     {
         var login = Container.Resolve<LoginWindow>();

@@ -8,6 +8,9 @@ namespace MyMachinePlatformClientCore.Service.FTPService;
 /// </summary>
 public class FTPClientService:IFTPClientService
 {
+    /// <summary>
+    /// 
+    /// </summary>
     private readonly string _ftpServerIp;
     /// <summary>
     /// 
@@ -22,7 +25,9 @@ public class FTPClientService:IFTPClientService
     /// </summary>
     private readonly string _ftpPassword;
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     private Action<LogMessage > _LogDataCallBack;
     /// <summary>
     /// 
@@ -67,7 +72,6 @@ public class FTPClientService:IFTPClientService
         catch (Exception ex)
         {
             _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"上传文件失败: {ex.Message}"));
-            
             return false; 
         }
     }
@@ -82,7 +86,6 @@ public class FTPClientService:IFTPClientService
         FtpWebRequest request = (FtpWebRequest)WebRequest.Create($"ftp://{_ftpServerIp}/{remoteFilePath}");
         request.Method = WebRequestMethods.Ftp.UploadFile;
         request.Credentials = new NetworkCredential(_ftpUserName, _ftpPassword);
-
         using (FileStream fileStream = File.OpenRead(localFilePath))
         using (Stream requestStream = await request.GetRequestStreamAsync())
         {
@@ -106,10 +109,7 @@ public class FTPClientService:IFTPClientService
             return false;
         }
     }
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
+     
     
     
     /// <summary>

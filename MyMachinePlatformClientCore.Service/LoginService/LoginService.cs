@@ -9,6 +9,9 @@ using MyMachinePlatformClientCore.Service.Managers;
 
 namespace MyMachinePlatformClientCore.Service 
 {
+    /// <summary>
+    /// 登录服务
+    /// </summary>
     public class LoginService : ILoginService
     {
         /// <summary>
@@ -28,12 +31,16 @@ namespace MyMachinePlatformClientCore.Service
         /// 
         /// </summary>
         private IHttpClientService _httpClientService;
-
+        /// <summary>
+        /// 
+        /// </summary>
         private bool isJson = false;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="tcpService"></param>
+        /// <param name="httpClientService"></param>
+        /// <param name="logDataCallBack"></param>
         public LoginService(int type,CTcpClientServiceManager tcpService=null,IHttpClientService httpClientService=null, Action<LogMessage> logDataCallBack= null)
         {
             this.type = type;

@@ -20,7 +20,12 @@ public class CJsonService
     {
         return string.IsNullOrEmpty(json)? default : JsonConvert.DeserializeObject<T>(json);
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     public static T ReadJsonFileToObject  <T>(string filePath)  
     {
         if (!File.Exists(filePath))
