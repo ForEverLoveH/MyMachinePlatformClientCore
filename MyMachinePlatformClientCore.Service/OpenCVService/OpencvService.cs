@@ -581,5 +581,31 @@ public class OpencvService
         return result;
     }
 
+    /// <summary>>
+    /// 图像的直方图均衡化
+    /// </summary>
+    /// <param name="image">待处理的图像</param>
+    /// <returns>直方图均衡化后的图像</returns>
+    public Bitmap HistogramEqualization(Bitmap image)
+    {
+        Mat imageMat = SetBitMapToMat(image);
+        Mat result = HistogramEqualization(imageMat);
+        return SetMatToBitMap(result);
+    }
+
+    /// <summary>
+    /// 图像的光影变换
+    /// </summary>
+    /// <param name="image">待处理的图像</param>
+    /// <returns>光影变换后的图像</returns>
+    public Mat Light(Mat image)
+    {
+        
+        Mat result = new Mat();
+        Cv2.Laplacian(image, result, MatType.CV_8U);
+        return result; 
+    }
+    
+    
 
 }

@@ -562,5 +562,7 @@ namespace MyMachinePlatformClientCore.Managers
 
         #endregion
 
+       
+
     }
 }

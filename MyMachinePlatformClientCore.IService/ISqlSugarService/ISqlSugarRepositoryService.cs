@@ -1,10 +1,12 @@
 using System.Linq.Expressions;
 
 namespace MyMachinePlatformClientCore.IService.ISqlSugarService;
-
-public interface ISqlSugarService
+/// <summary>
+/// sqlsugar仓储服务接口
+/// </summary>
+public interface ISqlSugarRepositoryService<T> where T : class, new()
 {
-
+   
     Task<T> Find<T>(Expression<Func<T, bool>> whereLambda) where T : class;
     /// <summary>
     /// 
@@ -120,4 +122,5 @@ public interface ISqlSugarService
     Task<List<T>> ExecuteSql<T>(string sql, params object[] parameters) where T : class, new();
 
     
+
 }

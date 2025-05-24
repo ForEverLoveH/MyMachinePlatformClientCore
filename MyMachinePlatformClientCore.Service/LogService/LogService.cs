@@ -3,9 +3,6 @@ using MyMachinePlatformClientCore.Log.MyLogs;
 
 namespace MyMachinePlatformClientCore.Service.LogService;
 
- 
-
-
 public class LogService
 {
 

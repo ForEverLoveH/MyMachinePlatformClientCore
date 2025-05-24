@@ -101,8 +101,8 @@ public class MqttClientService:IMqttClientService
     /// <param name="_recieveMessageCallBack"></param>
     /// <param name="_logMessageCallBack"></param>
     // 修改参数命名，将可为 null 的引用类型参数标记为可空类型
-    public MqttClientService(string clientId, string userName, string password, string serverIp, int port, int maxReconnectCount, string topicName, X509Certificate2? certificate = null,
-        Action<string>? recieveMessageCallBack = null, Action<LogMessage>? logMessageCallBack = null)
+    public MqttClientService(string clientId, string userName, string password, string serverIp, int port, int maxReconnectCount, string topicName, X509Certificate2 certificate = null,
+        Action<string> recieveMessageCallBack = null, Action<LogMessage> logMessageCallBack = null)
     {
         this.clientID = clientId;
         this.userName = userName;
@@ -114,10 +114,6 @@ public class MqttClientService:IMqttClientService
         this.maxReconnectCount = Math.Min(maxReconnectCount, 5);
         this.RecieveMessageCallBack = recieveMessageCallBack;
         this.LogMessageCallBack = logMessageCallBack;
-
-        // 初始化 _mqttClient 字段
-        _mqttClient = new MqttClientFactory().CreateMqttClient();
-
         _optionsBuilder = new MqttClientOptionsBuilder().WithClientId(clientId).WithTcpServer(serverIP, port)
             .WithCredentials(userName, password).WithTimeout(new TimeSpan(0, 0, 1000));
 
@@ -134,8 +130,11 @@ public class MqttClientService:IMqttClientService
                 
             });
         }
-
-        InitService();
+        _mqttClient = new MqttClientFactory().CreateMqttClient();
+        _mqttClient.ConnectedAsync += MqttClient_ConnectedAsync;
+        _mqttClient.DisconnectedAsync += MqttClient_DisconnectedAsync;
+        _mqttClient.ApplicationMessageReceivedAsync += MqttClient_ApplicationMessageReceivedAsync;
+        
     }
     /// <summary>
     /// 验证服务端sll 证书
@@ -156,9 +155,7 @@ public class MqttClientService:IMqttClientService
     private void InitService()
     {
          _mqttClient=new MqttClientFactory().CreateMqttClient();
-         _mqttClient.ConnectedAsync += MqttClient_ConnectedAsync;
-         _mqttClient.DisconnectedAsync += MqttClient_DisconnectedAsync;
-         _mqttClient.ApplicationMessageReceivedAsync += MqttClient_ApplicationMessageReceivedAsync;
+         
          
     }
     /// <summary>

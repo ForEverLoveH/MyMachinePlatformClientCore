@@ -23,7 +23,7 @@ namespace MyMachinePlatformClientCore.Common.GenerateCertificateService;
 /// <summary>
 /// 证书服务类
 /// </summary>
-public class MyGenerateCertificateService
+public class MyGenerateSSLCertificateService
 {
     /// <summary>
     /// 证书生效时间
@@ -51,7 +51,7 @@ public class MyGenerateCertificateService
     private  X509Name issuer;
     private  X509Name subject;
 
-    public MyGenerateCertificateService(DateTime loseEffect, string password, string friendlyName)
+    public MyGenerateSSLCertificateService(DateTime loseEffect, string password, string friendlyName)
     {
         this.loseEffect = loseEffect;
         this.password = password;

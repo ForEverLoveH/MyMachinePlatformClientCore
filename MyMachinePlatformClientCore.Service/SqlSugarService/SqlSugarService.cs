@@ -71,6 +71,19 @@ namespace MyMachinePlatformClientCore.Service.SqlSugarService
             return await db.Queryable<T>().Where(whereLambda).ToListAsync();
         }
         /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        ///<param name="pageIndex"></param>
+        ///<param name="pageSize"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task <List<T>> FindPageList<T>(Expression<Func<T, bool>> whereLambda,int pageIndex,int pageSize)  where T : class
+        {
+            return await db.Queryable<T>().Where(whereLambda).ToPageListAsync(pageIndex, pageSize);
+            
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>

@@ -9,11 +9,9 @@
         mc:Ignorable="d"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         Title="LoginWindows" Height="450" Width="800" prism:ViewModelLocator.AutoWireViewModel="True"  Background="Transparent"  WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid Style="{StaticResource GlobalGridStyle}">
 
-        <Grid.Background >
-            <ImageBrush ImageSource="/Images/3.png"  Stretch="UniformToFill"/>
-        </Grid.Background>
+        
         <Grid Grid.Row="1  ">
            <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0"  >
              <TabItem Margin="2,2,2,2" Style="{StaticResource TabItemStyle}" FontSize="20" Cursor="Hand" Header="登录" Height="38" Background=" #FF48B6FA" >

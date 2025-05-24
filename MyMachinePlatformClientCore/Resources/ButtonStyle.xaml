@@ -127,7 +127,13 @@
     <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
     <SolidColorBrush x:Key="LightColorBrush" Color="#DDD" />
 
-
+    <Style x:Key="GlobalGridStyle" TargetType="Grid">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="pack://application:,,,/Images/背景界面.png"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
     <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
