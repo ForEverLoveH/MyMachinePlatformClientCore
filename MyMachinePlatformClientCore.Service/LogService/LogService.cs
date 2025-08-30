@@ -23,36 +23,34 @@ namespace MyMachinePlatformClientCore.Service.LogService
         public void LogDebug(string message)
         {
            
-            CLogService.Debug().Debug(message);
+            CLogService.Debug("Debug").Debug(message);
         }
 
         
 
         public void LogError(string message)
         {
-            
-
-            
-            CLogService.Error().Error(message);
+              
+            CLogService.Error("Error").Error(message);
         }
 
         public void LogFatal(string message)
         {
            
-            CLogService.Fatal().Fatal(message);
+            CLogService.Fatal("Fatal").Fatal(message);
         }
 
         public void LogInfo(string message)
         {
            
-            CLogService.Info().Info(message);
+            CLogService.Info("Info").Info(message);
         }
 
       
         public void LogWarn(string message)
         {
           
-            CLogService.Warn().Warn(message);
+            CLogService.Warn("Warn").Warn(message);
         }
 
         
