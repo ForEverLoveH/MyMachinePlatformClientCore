@@ -4,6 +4,7 @@ using MQTTnet;
 using MQTTnet.Server;
 using MyMachinePlatformClientCore.IService.IMqttService.Server;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 
 namespace MyMachinePlatformClientCore.Service.MQTTService.Server;
 /// <summary>
@@ -109,7 +110,7 @@ public class MqttServerService : IMqttServerService
         string topic =arg.ApplicationMessage.Topic;
         string contents = arg.ApplicationMessage.ConvertPayloadToString();
         string mess = $"接收到消息：Client：【{client}】 Topic：【{topic}】 Mesage：【{contents}】";
-        _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.Info, mess));
+        _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, mess));
         _ReceiveMessageCallBack?.Invoke(contents);
           
     }
@@ -140,7 +141,7 @@ public class MqttServerService : IMqttServerService
     {
         string clientId = arg.ClientId;
         string topic = arg.TopicFilter.Topic;
-        _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+        _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,
             $"客户端{clientId}已订阅主题{topic}"));
         AddTopicToDictionary(clientId,topic);
         
@@ -158,7 +159,7 @@ public class MqttServerService : IMqttServerService
         string clientID = arg.ClientId;
         if (sucessClientIdList.Keys.Contains(clientID))
         {
-            _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+            _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,
                 $"客户端{clientID}已断开连接"));
             sucessClientIdList.Remove(clientID);
         }
@@ -178,7 +179,7 @@ public class MqttServerService : IMqttServerService
         if (sucessClientIdList.Keys.Contains(clientId))
         {
             string ipaddress = arg.Endpoint;
-            _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+            _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,
                 $"客户端{clientId}已连接到服务器,ip地址为{ipaddress}"));
             sucessClientIdList[clientId] = ipaddress;
 

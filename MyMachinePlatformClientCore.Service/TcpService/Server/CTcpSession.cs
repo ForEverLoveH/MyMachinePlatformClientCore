@@ -17,14 +17,17 @@ namespace MyMachinePlatformClientCore.Service
 
 
         private ConcurrentDictionary<Guid, Socket> _connectedClient = new ConcurrentDictionary<Guid, Socket>();
+
+        private Action<LogMessage> LogMessageCallBack;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="tcpService"></param>
-        public CTcpSession(TcpService tcpService, bool isjson = false) : base(tcpService)
+        public CTcpSession(TcpService tcpService,Action<LogMessage > logMessageCallBack ,bool isjson = false) : base(tcpService)
         {
             this.isjson = isjson;
             this.tcpService = tcpService;
+            this.LogMessageCallBack = logMessageCallBack;
         }
         /// <summary>
         /// 
@@ -43,7 +46,7 @@ namespace MyMachinePlatformClientCore.Service
             Guid guid = Id;
             if (!_connectedClient.ContainsKey(guid))
                 _connectedClient.TryAdd(Id, mscoSocket);
-            MyLogTool.ColorLog(MyLogColor.Blue, $"客户端：{guid}已连接");
+          
         }
         /// <summary>
         /// 
@@ -75,7 +78,7 @@ namespace MyMachinePlatformClientCore.Service
                         byte[] messages = new byte[messageCode.Length - 2];
                         Array.Copy(messageCode, 0, messages, 0, messages.Length);
                         string mess = Encoding.UTF8.GetString(messages);
-                        MyLogTool.ColorLog(MyLogColor.Green, string.Format("{0}:{1}", "收到客户端json 数据", mess));
+                        LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, string.Format("{0}:{1}", "收到客户端json 数据", mess)));
                     }
                 }
             }

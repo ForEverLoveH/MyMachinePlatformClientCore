@@ -4,6 +4,7 @@ using Google.Protobuf;
 using MyMachinePlatformClientCore.Common.Commo;
 using MyMachinePlatformClientCore.Common.SSLService.Client;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 using MyMachinePlatformClientCore.Service.ProtobufService;
 
 namespace MyMachinePlatformClientCore.Service.SSLService.Client;
@@ -59,27 +60,27 @@ public class CSslClient:SslClient
     protected override void OnConnected()
     {
         string msg = $"Chat SSL client connected a new session with Id {Id}";
-        _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.Success, msg));
+        _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.INFO, msg));
     }
     /// <summary>
     /// 
     /// </summary>
     protected override void OnHandshaked()
     {
-        _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.Info,
+        _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.INFO,
             $"Chat SSL client handshaked a new session with Id {Id}"));
     }
 
     protected override void OnDisconnected()
     {
-       _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.Warm,$"Chat SSL client disconnected a new session with Id {Id}")); 
+       _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.WARN,$"Chat SSL client disconnected a new session with Id {Id}")); 
        Thread.Sleep(1000);
        if (!_stop)
            ConnectAsync();
     }
     protected override void OnError(SocketError error)
     {
-        _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.Error,$"Chat SSL client caught an error with code {error}"));
+        _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.ERROR,$"Chat SSL client caught an error with code {error}"));
     }
     protected override void OnReceived(byte[] buffer, long offset, long size)
     {
@@ -149,7 +150,7 @@ public class CSslClient:SslClient
                      if (!string.IsNullOrEmpty(mess))
                      {
                          string message = string.Format("{0}:{1}", "收到服务端json 数据", mess);
-                         _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.Info, message));
+                         _logDataCallback?.Invoke(LogMessage.SetMessage(LogType.INFO, message));
                          
                      }
                  }

@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MyMachinePlatformClientCore.Service.LogService;
 
 namespace MyMachinePlatformClientCore.Service
 {
@@ -52,7 +53,7 @@ namespace MyMachinePlatformClientCore.Service
 
         protected override void OnConnected()
         {
-            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Info,$" tcp 客户端服务器已连接，当前的guid为 {Id}"));
+            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,$" tcp 客户端服务器已连接，当前的guid为 {Id}"));
              
             StartHeartBeatService();
         }
@@ -63,7 +64,7 @@ namespace MyMachinePlatformClientCore.Service
         /// </summary>
         protected override void OnDisconnected()
         {
-            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Info,$" tcp 客户端服务器已断开连接，当前的guid为 {Id}"));
+            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,$" tcp 客户端服务器已断开连接，当前的guid为 {Id}"));
            
             // Wait for a while...
             Thread.Sleep(1000);
@@ -149,7 +150,7 @@ namespace MyMachinePlatformClientCore.Service
                         string mess = Encoding.UTF8.GetString(messages);
                         if (!string.IsNullOrEmpty(mess))
                         {
-                            MyLogTool.ColorLog(MyLogColor.Blue, string.Format("{0}:{1}", "收到服务端json 数据", mess));
+                            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, string.Format("{0}:{1}", "收到服务端json 数据", mess)));
                         }
                     }
 
@@ -301,7 +302,7 @@ namespace MyMachinePlatformClientCore.Service
         /// <param name="error"></param>
         protected override void OnError(SocketError error)
         {
-            MyLogTool.Error($"Chat TCP client caught an error with code {error}");
+            _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR,$"Chat TCP client caught an error with code {error}"));
         }
     }
 }

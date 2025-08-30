@@ -36,7 +36,7 @@ namespace MyMachinePlatformClientCore.ViewModels;
          this.machineManagers = machineManager;
         // this.userService = userService;
 
-        CreateVerficationImage(200, 200);
+       // CreateVerficationImage(200, 200);
         machineManagers.Init();
 
      }
@@ -121,7 +121,8 @@ namespace MyMachinePlatformClientCore.ViewModels;
     {
         get => refreshVerficationCodeCommand ??= new DelegateCommand<object>(async (obj) =>
         {
-            CreateVerficationImage(200, 200);
+
+            //CreateVerficationImage(200, 200);
         });
         
     }
@@ -133,19 +134,19 @@ namespace MyMachinePlatformClientCore.ViewModels;
     /// <summary>
     /// 
     /// </summary>
-     private void CreateVerficationImage(int hei,int wei)
-     {
-         string txt = GenerateRandomTxt();
-         currentCode = txt;
-         //this.verficationCode = txt;
-         string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images/5.png");
-         byte[] img = GenerateCatchaImage(txt, hei, wei,path);
-         BitmapImage image = new BitmapImage();
-         image.BeginInit();
-         image.StreamSource = new MemoryStream(img);
-         image.EndInit(); 
-         this.VerficationCodeImage = image;
-     }
+     //private void CreateVerficationImage(int hei,int wei)
+     //{
+     //    string txt = GenerateRandomTxt();
+     //    currentCode = txt;
+     //    //this.verficationCode = txt;
+     //   string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images/5.png");
+     //    byte[] img = GenerateCatchaImage(txt, hei, wei,path);
+     //    BitmapImage image = new BitmapImage();
+     //    image.BeginInit();
+     //    image.StreamSource = new MemoryStream(img);
+     //    image.EndInit(); 
+     //    this.VerficationCodeImage = image;
+     //}
      
      /// <summary>
      /// 

@@ -473,7 +473,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusDriver.ModbusRTU.Server
                     sendFrame[7] = crc16[1];// Number of data to read寄存器数量低字节  
                     _serialPort.Write(sendFrame, 0, sendFrame.Length);
                     break;
-                    break;
+                    
                 default:
                     _lastError = "SendGetRes() illegal Function Code:" + data[7].ToString();
                     //异常返回帧构建：

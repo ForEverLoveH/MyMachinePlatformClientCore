@@ -1,6 +1,7 @@
 using System.Net;
 using MyMachinePlatformClientCore.IService.IFTPService;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 
 namespace MyMachinePlatformClientCore.Service.FTPService;
 /// <summary>
@@ -71,7 +72,7 @@ public class FTPClientService:IFTPClientService
         }
         catch (Exception ex)
         {
-            _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"上传文件失败: {ex.Message}"));
+            _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"上传文件失败: {ex.Message}"));
             return false; 
         }
     }
@@ -101,7 +102,7 @@ public class FTPClientService:IFTPClientService
             var status = response.StatusCode;
             if (status == FtpStatusCode.CommandOK)
             {
-                _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+                _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,
                     $"上传文件成功: {localFilePath} -> {remoteFilePath}"));
                  
                 return true;
@@ -152,7 +153,7 @@ public class FTPClientService:IFTPClientService
                 bytesUploaded += bytesRead;
             }
         }
-        _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,
+        _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,
             $"分段上传文件成功: {localFilePath} -> {remoteFilePath}"));
         // 这里可以添加合并文件块的逻辑，需要服务器端支持
         
@@ -188,7 +189,7 @@ public class FTPClientService:IFTPClientService
 
                 if (response.StatusCode == FtpStatusCode.CommandOK)
                 {
-                    _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,$"下载文件成功: {remoteFilePath} -> {localFilePath}"
+                    _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,$"下载文件成功: {remoteFilePath} -> {localFilePath}"
                          ));
                     
                     return true;
@@ -203,7 +204,7 @@ public class FTPClientService:IFTPClientService
         }
         catch (Exception ex)
         {
-            _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"下载文件失败: {ex.Message}"));
+            _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"下载文件失败: {ex.Message}"));
             
             return false; 
         }
@@ -226,7 +227,7 @@ public class FTPClientService:IFTPClientService
                 var status = response.StatusCode;
                 if (status == FtpStatusCode.CommandOK)
                 {
-                    _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,$"删除文件成功"
+                    _LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,$"删除文件成功"
                     ));
                     
                     return true;

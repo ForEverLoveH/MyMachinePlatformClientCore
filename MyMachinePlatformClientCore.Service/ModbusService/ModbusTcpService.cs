@@ -1,5 +1,6 @@
 ﻿using MyMachinePlatformClientCore.Common.TcpService.Client;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 using NModbus;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
                 var factory = new ModbusFactory();
                 tcpMaster = factory.CreateMaster(_tcpClient);
                 IsConnection = true;
-                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success, $"Modbus Tcp 服务连接成功，IP地址：{serverIP}，端口号：{port}"));
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, $"Modbus Tcp 服务连接成功，IP地址：{serverIP}，端口号：{port}"));
 
             }
             catch (Exception ex)
@@ -141,7 +142,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             }
             catch (Exception e)
             {
-               _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error,"Modbus Tcp 服务写入数据失败，异常信息为：" + e.Message));
+               _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR,"Modbus Tcp 服务写入数据失败，异常信息为：" + e.Message));
                return;
 
             }
@@ -182,7 +183,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             }
             catch (Exception e)
             {
-                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error,"Modbus Tcp 服务读取数据失败，异常信息为：" + e.Message)); 
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR,"Modbus Tcp 服务读取数据失败，异常信息为：" + e.Message)); 
             }
             return (coilsBuffer, registerBuffer);
         }

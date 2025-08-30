@@ -11,6 +11,7 @@ using MyMachinePlatformClientCore.Common.TcpService.Server;
 using MyMachinePlatformClientCore.Service.MessageRouter;
 using static MyMachinePlatformClientCore.Service.MessageRouter.CProtoMessageRouter;
 using TcpClient = MyMachinePlatformClientCore.Common.TcpService.Client.TcpClient;
+using MyMachinePlatformClientCore.Log.MyLogs;
 
 namespace MyMachinePlatformClientCore.Service.message_router
 {
@@ -25,16 +26,18 @@ namespace MyMachinePlatformClientCore.Service.message_router
         /// 
         /// </summary>
         private int type= 0;
+        private Action<LogMessage> LogMessageCallback;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="threadCount"></param>
         /// <param name="type"> </param>
-        public MessageRouterManager( int threadCount, int type=0)
+        public MessageRouterManager( int threadCount,Action<LogMessage>logMessageCallback, int type=0)
         {
             
             this.threadCount = threadCount;
             this.type = type;
+            this.LogMessageCallback = logMessageCallback;
         }
         /// <summary>
         /// 
@@ -52,12 +55,12 @@ namespace MyMachinePlatformClientCore.Service.message_router
         {
             if (type == 0)
             {
-                clientJsonMessage = new ClientJsonMessageRouter();
+                clientJsonMessage = new ClientJsonMessageRouter(LogMessageCallback);
                 clientJsonMessage. StartService(threadCount);
             }
             else
             {
-                protoMessageRouter = new CProtoMessageRouter();
+                protoMessageRouter = new CProtoMessageRouter(LogMessageCallback);
                 protoMessageRouter.StartService(threadCount);
             }
         }

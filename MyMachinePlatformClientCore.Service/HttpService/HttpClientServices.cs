@@ -10,11 +10,12 @@ public class HttpClientServices
 {
     private string url;
 
-    public HttpClientServices(string url)
+    public HttpClientServices(string url, Action<LogMessage> logMessageCallBack)
     {
         this.url = url;
+        LogMessageCallBack = logMessageCallBack;
     }
-
+    private Action<LogMessage> LogMessageCallBack;
      
     /// <summary>
     /// 发送post请求
@@ -41,7 +42,7 @@ public class HttpClientServices
                 string result="";
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
-                MyLogTool.Log(DateTime.Now.ToString("yyyy-MM-DD HH:pp:ss")+$"正在通过{postName}接口往服务端发送{json}数据");
+                LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,DateTime.Now.ToString("yyyy-MM-DD HH:pp:ss")+$"正在通过{postName}接口往服务端发送{json}数据"));
                 using (HttpClient client = new HttpClient())
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls |
@@ -68,20 +69,20 @@ public class HttpClientServices
                 if (!string.IsNullOrEmpty(result))
                 {
                     watch.Stop();
-                    MyLogTool.Log(DateTime.Now.ToString("yyyy-MM-DD HH:pp:ss")+$"调用{postName}接口往服务端发送{json}数据成功,用时{watch.ElapsedMilliseconds}毫秒");
+                    LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, DateTime.Now.ToString("yyyy-MM-DD HH:pp:ss") + $"调用{postName}接口往服务端发送{json}数据成功,用时{watch.ElapsedMilliseconds}毫秒"));
                     return JsonConvert.DeserializeObject<TOut>(result);
                     
                 }
                 else
                 {
-                    MyLogTool.ColorLog(MyLogColor.Red,$"调用{postName}接口往服务端发送{json}数据失败！！");
+                    LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"调用{postName}接口往服务端发送{json}数据失败！！"));
                     watch.Stop();
                     return default(TOut);
                 }
             }
             catch (Exception e)
             {
-                 MyLogTool.ColorLog(MyLogColor.Red,$"调用{postName}接口往服务端发送{json}数据出现异常！！");
+                 LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"调用{postName}接口往服务端发送{json}数据出现异常！！"));
                  return default(TOut);
             }
             

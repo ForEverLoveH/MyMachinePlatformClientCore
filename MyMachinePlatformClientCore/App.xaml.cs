@@ -18,16 +18,16 @@ public partial class App : PrismApplication
     /// <param name="shell"></param>
     protected override void InitializeShell(Window shell)
     {
-      //var login = Container.Resolve<LoginWindow>(); 
-      //var isLogin = login.ShowDialog();
-      // if (isLogin == true)
-      //{
-      //      base.InitializeShell(shell);
-      //}
-      //else 
-      //{
-      //      Current.Shutdown();
-      //}
+        var login = Container.Resolve<LoginWindow>();
+        var isLogin = login.ShowDialog();
+        if (isLogin == true)
+        {
+            base.InitializeShell(shell);
+        }
+        else
+        {
+            Current.Shutdown();
+        }
     }
 
     /// <summary>

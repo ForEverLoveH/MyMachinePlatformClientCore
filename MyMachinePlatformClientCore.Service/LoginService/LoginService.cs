@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.Managers;
+using MyMachinePlatformClientCore.Service.LogService;
 
 namespace MyMachinePlatformClientCore.Service 
 {

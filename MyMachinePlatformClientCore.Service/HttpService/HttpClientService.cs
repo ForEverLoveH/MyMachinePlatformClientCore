@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using MyMachinePlatformClientCore.IService;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 namespace MyMachinePlatformClientCore.Service.HttpService;
 
 /// <summary>
@@ -11,7 +12,7 @@ namespace MyMachinePlatformClientCore.Service.HttpService;
 public class HttpClientService : IHttpClientService
 {
     private string url;
-
+    private    Action<LogMessage >LogMessageHandleCallBack;
     public string Url
     {
         set => url = value;
@@ -21,10 +22,10 @@ public class HttpClientService : IHttpClientService
     public HttpClientService(string url,Action<LogMessage> logDataHandleCallBack=null)
     {
         this.url = url;
-        this.logDataHandleCallBack = logDataHandleCallBack;
+        this.LogMessageHandleCallBack = logDataHandleCallBack;
     }
 
-    private Action<LogMessage> logDataHandleCallBack;
+    
     
     /// <summary>
     /// 发送Post请求
@@ -46,11 +47,11 @@ public class HttpClientService : IHttpClientService
             if (string.IsNullOrWhiteSpace(url)) return default;
             url += postName;
             string json = JsonService.CJsonService.SerializeObject<TIn>(obj);
-            logDataHandleCallBack?.Invoke(new LogMessage()
+            LogMessageHandleCallBack?.Invoke(new LogMessage()
             {
                 message =
                     string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "请求服务器:{0}，请求内容为：{1}", url, json),
-                _LogType = LogType.Info
+                _LogType = LogType.INFO
             });
             
             string result = "";
@@ -97,9 +98,9 @@ public class HttpClientService : IHttpClientService
                                 using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8))
                                 {
                                     result = await reader.ReadToEndAsync();
-                                    logDataHandleCallBack?.Invoke(new LogMessage()
+                                    LogMessageHandleCallBack?.Invoke(new LogMessage()
                                     {
-                                        _LogType = LogType.Success,
+                                        _LogType = LogType.INFO,
                                         message =string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "服务器返回内容为：{0}",
                                         result),
                                     });
@@ -108,9 +109,9 @@ public class HttpClientService : IHttpClientService
                         }
                         else
                         {
-                            logDataHandleCallBack?.Invoke(new LogMessage()
+                            LogMessageHandleCallBack?.Invoke(new LogMessage()
                             {
-                                _LogType = LogType.Warm,
+                                _LogType = LogType.WARN,
                                 message =string.Format("发送post请求服务器:{0}出现错误,错误状态码信息为：{1}", url, response.StatusCode)
                             });
                              
@@ -131,9 +132,9 @@ public class HttpClientService : IHttpClientService
         }
         catch (Exception e)
         {
-            logDataHandleCallBack?.Invoke(new LogMessage()
+            LogMessageHandleCallBack?.Invoke(new LogMessage()
             {
-                _LogType = LogType.Error,
+                _LogType = LogType.ERROR,
                 message =string.Format("请求服务器:{0}出现异常,异常信息为：{1}", url, e.Message)
             });
             
@@ -186,9 +187,9 @@ public class HttpClientService : IHttpClientService
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
                             string result = await reader.ReadToEndAsync();
-                             logDataHandleCallBack?.Invoke(new LogMessage()
+                             LogMessageHandleCallBack?.Invoke(new LogMessage()
                              {
-                                 _LogType = LogType.Success,
+                                 _LogType = LogType.INFO,
                                  message = string.Format(
                                      DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + $"往服务器{url}发送get请求" + "返回内容为：{0}",
                                      result)
@@ -198,9 +199,9 @@ public class HttpClientService : IHttpClientService
                         }
                         else
                         {
-                            logDataHandleCallBack?.Invoke(new LogMessage()
+                            LogMessageHandleCallBack?.Invoke(new LogMessage()
                             {
-                                _LogType = LogType.Warm,
+                                _LogType = LogType.WARN,
                                 message = string.Format("发送get请求服务器:{0}出现错误,错误状态码信息为：{1}", url, response.StatusCode)
                             });
                            
@@ -213,9 +214,9 @@ public class HttpClientService : IHttpClientService
         }
         catch (Exception e)
         {
-            logDataHandleCallBack?.Invoke(new LogMessage()
+            LogMessageHandleCallBack?.Invoke(new LogMessage()
             {
-                _LogType = LogType.Error,
+                _LogType = LogType.ERROR,
                 message = string.Format("请求服务器:{0}出现异常,异常信息为：{1}", url, e.Message)
             });
             
@@ -247,7 +248,7 @@ public class HttpClientService : IHttpClientService
             message = message,
             _LogType = logType
         };
-        logDataHandleCallBack?.Invoke(messages);
+        LogMessageHandleCallBack?.Invoke(messages);
     }
 
     /// <summary>
@@ -273,7 +274,7 @@ public class HttpClientService : IHttpClientService
             string json = JsonService.CJsonService.SerializeObject<TIn>(obj);
             SetCurrentLogMessage(
                 string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "请求服务器:{0}，请求内容为：{1}", url, json),
-                LogType.Info);
+                LogType.INFO);
             if(string.IsNullOrWhiteSpace(json))return default;
             
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -308,7 +309,7 @@ public class HttpClientService : IHttpClientService
                             result = await reader.ReadToEndAsync();
                             SetCurrentLogMessage(
                                 string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "服务器返回内容为：{0}", result),
-                                LogType.Success);
+                                LogType.INFO);
 
 
                         }
@@ -316,7 +317,7 @@ public class HttpClientService : IHttpClientService
                         {
                             SetCurrentLogMessage(
                                 string.Format("发送put请求服务器:{0}出现错误,错误状态码信息为：{1}", url, response.StatusCode),
-                                LogType.Warm);
+                                LogType.WARN);
                             
                             return default;
                         }
@@ -337,7 +338,7 @@ public class HttpClientService : IHttpClientService
         {
             SetCurrentLogMessage(
                 string.Format("请求服务器:{0}出现异常,异常信息为：{1}", url, e.Message),
-                LogType.Error);
+                LogType.ERROR);
              
             return default;
         }
@@ -383,7 +384,7 @@ public class HttpClientService : IHttpClientService
                         string result = await reader.ReadToEndAsync();
                         SetCurrentLogMessage(
                             string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "服务器返回内容为：{0}", result),
-                            LogType.Success);
+                            LogType.INFO);
                        
                         return JsonService.CJsonService.DeserializeObject<TOut>(result);
                     }
@@ -391,7 +392,7 @@ public class HttpClientService : IHttpClientService
                     {
                         SetCurrentLogMessage(
                             string.Format("发送delete请求服务器:{0}出现错误,错误状态码信息为：{1}", url, webResponse.StatusCode),
-                            LogType.Warm);
+                            LogType.WARN);
 
                         
                         return default;
@@ -403,7 +404,7 @@ public class HttpClientService : IHttpClientService
         {
             SetCurrentLogMessage(
                 string.Format(string.Format("请求服务器:{0}出现异常,异常信息为：{1}", url, e.Message)),
-                LogType.Error);
+                LogType.ERROR);
             return null;
         }
 
@@ -459,7 +460,7 @@ public class HttpClientService : IHttpClientService
                             
                         }
                         //组包
-                        SetCurrentLogMessage(string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "文件下载成功，保存路径为：{0}", savePath),LogType.Success);
+                        SetCurrentLogMessage(string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "文件下载成功，保存路径为：{0}", savePath),LogType.INFO);
                         return true;
                     }
                 }
@@ -467,7 +468,7 @@ public class HttpClientService : IHttpClientService
                 {
                     SetCurrentLogMessage(string.Format(
                         DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "文件失败" + "，错误状态码信息为：{0}",
-                        response.StatusCode.ToString()), LogType.Error);
+                        response.StatusCode.ToString()), LogType.ERROR);
                     
                     return false;
 
@@ -477,7 +478,7 @@ public class HttpClientService : IHttpClientService
         }
         catch (Exception e)
         {
-            SetCurrentLogMessage(string.Format("请求服务器:{0}出现异常,异常信息为：{1}", url, e.Message), LogType.Error);
+            SetCurrentLogMessage(string.Format("请求服务器:{0}出现异常,异常信息为：{1}", url, e.Message), LogType.ERROR);
              
             return default;
         }
@@ -514,7 +515,7 @@ public class HttpClientService : IHttpClientService
         }
         catch (Exception e)
         {
-            MyLogTool.ColorLog(MyLogColor.Red, string.Format("请求服务器:{0}出现异常, 异常信息为：{1}", url, e.Message));
+            LogMessageHandleCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("请求服务器:{0}出现异常, 异常信息为：{1}", url, e.Message)));
             return false;
         }
     }
@@ -573,7 +574,7 @@ public class HttpClientService : IHttpClientService
                         }
                         catch (Exception e)
                         {
-                            SetCurrentLogMessage(string.Format("上传块 {0} 时出现异常, 异常信息为：{1}", currentChunk, e.Message),LogType.Warm);
+                            SetCurrentLogMessage(string.Format("上传块 {0} 时出现异常, 异常信息为：{1}", currentChunk, e.Message),LogType.WARN);
                             
                             return false;
                         }
@@ -588,13 +589,13 @@ public class HttpClientService : IHttpClientService
 
             SetCurrentLogMessage(
                 string.Format(DateTime.Now.ToString("yyyy-MM-dd HH:ss:pp") + "文件上传成功，文件路径为：{0}", filePath),
-                LogType.Success);
+                LogType.INFO);
             
             return true;
         }
         catch (Exception e)
         {
-            SetCurrentLogMessage(string.Format("请求服务器:{0}出现异常, 异常信息为：{1}", url, e.Message), LogType.Error);
+            SetCurrentLogMessage(string.Format("请求服务器:{0}出现异常, 异常信息为：{1}", url, e.Message), LogType.ERROR);
             
             return false;
         }
@@ -644,7 +645,7 @@ public class HttpClientService : IHttpClientService
             }
             else
             {
-                SetCurrentLogMessage(string.Format("发送文件块 {0} 到服务器:{1} 出现错误, 错误状态码信息为：{2}", currentChunk, url, response.StatusCode),LogType.Warm);
+                SetCurrentLogMessage(string.Format("发送文件块 {0} 到服务器:{1} 出现错误, 错误状态码信息为：{2}", currentChunk, url, response.StatusCode),LogType.WARN);
                
                 return false;
             }

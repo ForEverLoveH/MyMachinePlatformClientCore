@@ -55,6 +55,11 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter
         {
             get { return isRunning; }
         }
+        private Action<LogMessage> _logMessageCallBack;
+        public CProtoMessageRouter(Action<LogMessage> logMessageCallBack)
+        {
+            _logMessageCallBack = logMessageCallBack;
+        }
 
         /// <summary>
         /// 添加消息到队列中
@@ -95,7 +100,7 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter
             }
             catch (Exception ex)
             {
-                MyLogTool.ColorLog(MyLogColor.Red, "订阅消息发生异常，异常信息为：" + ex.Message);
+                _logMessageCallBack?.Invoke(  LogMessage.SetMessage(LogType.ERROR, "订阅消息发生异常，异常信息为：" + ex.Message));
                 return;
             }
         }
@@ -119,7 +124,7 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter
             }
             catch (Exception ex)
             {
-                MyLogTool.ColorLog(MyLogColor.Red, "退订消息发生异常，异常信息为：" + ex.Message);
+                _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, "退订消息发生异常，异常信息为：" + ex.Message));
                 return;
             }
         }
@@ -199,7 +204,7 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter
             }
             catch (Exception ex)
             {
-                MyLogTool.ColorLog(MyLogColor.Red, "消息处理发生异常，异常信息为：" + ex.Message);
+                _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, "消息处理发生异常，异常信息为：" + ex.Message));
             }
             finally
             {
@@ -259,7 +264,7 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter
                 }
                 catch (Exception ex)
                 {
-                    MyLogTool.ColorLog(MyLogColor.Red, "消息处理发生异常，异常信息为：" + ex.Message);
+                    _logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, "消息处理发生异常，异常信息为：" + ex.Message));
                     return;   
                 }
             }

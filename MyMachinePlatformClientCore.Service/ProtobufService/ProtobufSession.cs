@@ -46,7 +46,7 @@ namespace MyMachinePlatformClientCore.Service.ProtobufService;
          {
              var fname = list[i];
              var t = _registry[fname];
-             MyLogTool.ColorLog(MyLogColor.Yellow,"Proto类型注册：{0} - {1}", i, fname);
+           
              mDict1[i] = t;
              mDict2[t] = i;
          }
@@ -131,10 +131,10 @@ namespace MyMachinePlatformClientCore.Service.ProtobufService;
      public static IMessage ParseFrom(int typeCode, byte[] data, int offset, int len)
      {
          Type t =  SeqType(typeCode);
-         MyLogTool.ColorLog(MyLogColor.Blue,"收到消息："+ t.FullName);
+         //MyLogTool.ColorLog(MyLogColor.Blue,"收到消息："+ t.FullName);
          var desc = t.GetProperty("Descriptor").GetValue(t) as MessageDescriptor;
          var msg = desc.Parser.ParseFrom(data, offset, len);
-         MyLogTool.ColorLog(MyLogColor.Green,"解析消息：code={0} - {1}", typeCode, msg);
+         //MyLogTool.ColorLog(MyLogColor.Green,"解析消息：code={0} - {1}", typeCode, msg);
          return msg;
      }
  }

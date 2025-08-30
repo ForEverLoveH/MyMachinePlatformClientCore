@@ -12,9 +12,14 @@ namespace MyMachinePlatformClientCore.Service.UDPService.Client;
 public class CUdpClient:UDPClient
 {
     private bool isJson = false;
+    private Action<LogMessage> _logDataCallBack;
     public CUdpClient(IPAddress address, int port, bool isJson = false) : base(address, port)
     {
         this.isJson = isJson;
+    }
+    public CUdpClient(string address, int port,Action<LogMessage> _log ,bool isJson = false) : this(address, port, isJson)
+    {
+        this._logDataCallBack = _log;
     }
 
     public CUdpClient(string address, int port, bool isJson = false) : base(address, port)
@@ -122,7 +127,7 @@ public class CUdpClient:UDPClient
                     string mess = Encoding.UTF8.GetString(messages);
                     if (!string.IsNullOrEmpty(mess))
                     {
-                        MyLogTool.ColorLog(MyLogColor.Blue, string.Format("{0}:{1}", "收到服务端json 数据", mess));
+                        _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, string.Format("{0}:{1}", "收到服务端json 数据", mess)));
                     }
                 }
 

@@ -271,7 +271,7 @@ namespace MyMachinePlatformClientCore.Managers
         /// <param name="bindPort">本地端口 必须大于1023，如：50001,5002,5003</param>
         public void StartEIPService(string ipaddress, int port,int bindPort)
         {
-            _omRonEipService = new OMRonEIPService();
+            _omRonEipService = new OMRonEIPService(HandleCurrentLogCallBack);
             _omRonEipService.SetTCPParams(IPAddress.Parse(ipaddress), port, bindPort);
             _omRonEipService.Connect();
         }
@@ -352,11 +352,11 @@ namespace MyMachinePlatformClientCore.Managers
             tcpClientServiceManager = new CTcpClientServiceManager(_tcpIpAddress, _tcpPort,isjson,HandleCurrentLogCallBack);
             if (tcpClientServiceManager.IsConnected)
             {
-                HandleCurrentLogCallBack(LogMessage.SetMessage(LogType.Success,$"服务端{_tcpIpAddress}:{_tcpPort}连接成功"));
+                HandleCurrentLogCallBack(LogMessage.SetMessage(LogType.INFO,$"服务端{_tcpIpAddress}:{_tcpPort}连接成功"));
             }
             else
             {
-                HandleCurrentLogCallBack(LogMessage.SetMessage(LogType.Error, $"服务端{_tcpIpAddress}:{_tcpPort}连接失败"));
+                HandleCurrentLogCallBack(LogMessage.SetMessage(LogType.ERROR, $"服务端{_tcpIpAddress}:{_tcpPort}连接失败"));
             }
 
         }
@@ -409,22 +409,9 @@ namespace MyMachinePlatformClientCore.Managers
 
 
         #region  log日志相关
-        /// <summary>
-        /// 
-        /// </summary>
-        private LogService _logService;
-        /// <summary>
-        /// 
-        /// </summary>
+        private ILogService _logService;
 
-        private void StartLogService()
-        {
-            _logService = new LogService(4, mess =>
-            {
-                HandleCurrentLogCallBack(mess);
-            });
-            _logService.StartLogService();
-        }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -433,19 +420,15 @@ namespace MyMachinePlatformClientCore.Managers
         {
             string mess = message.message;
             LogType type = message._LogType;
+            
             switch (type)
             {
-                case LogType.Error:
-                    MyLogTool.ColorLog(MyLogColor.Red,mess); break;
-                case LogType.Warm :
-                    MyLogTool.ColorLog(MyLogColor.Blue,mess); break;
-                case LogType.Success:
-                    MyLogTool.ColorLog(MyLogColor.Green,mess); break;
-                case LogType.Info:
-                    MyLogTool.ColorLog(MyLogColor.Magentna,mess); break;
-                case LogType.None:
-                    
-                    MyLogTool.ColorLog(MyLogColor.Cyan,mess); break;
+                case LogType.INFO: _logService.LogInfo(mess);break;
+                case LogType.ERROR: _logService.LogError(mess); break;
+                case LogType.WARN: _logService.LogWarn(mess); break;
+                case LogType.DEBUG: _logService.LogDebug(mess); break;
+                case LogType.FATAL: _logService.LogFatal(mess); break;
+                default: _logService.LogInfo(mess); break;
             }
         }
 
@@ -472,7 +455,11 @@ namespace MyMachinePlatformClientCore.Managers
         private void ServiceInit()
         {
             StartLogService();
-            
+            HandleCurrentLogCallBack(new LogMessage()
+            {
+                _LogType = LogType.INFO,
+                message = "日志服务初始化成功"
+            });
             //StartEIPService(_Eipaddress, _Eipport, _EipBindPort);
 
             //StartOMRonTcpFinsService(_finsIpAddress, _finsPort);
@@ -488,6 +475,11 @@ namespace MyMachinePlatformClientCore.Managers
             StartLoginService();
         }
 
+        private void StartLogService()
+        {
+            _logService= new    LogService();
+        }
+
         #region  消息路由相关(tcp 客户端)
 
         /// <summary>
@@ -500,7 +492,7 @@ namespace MyMachinePlatformClientCore.Managers
 
         private void StartMessageRouterService()
         {
-            _messageRouterManager = new MessageRouterManager(10, 1);
+            _messageRouterManager = new MessageRouterManager(10,HandleCurrentLogCallBack, 1);
             _messageRouterManager.StartService();
         }
         

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 
 namespace MyMachinePlatformClientCore.Service.OMRonService ;
 
@@ -12,7 +13,7 @@ public class OMRonTcpFinsService
      [DllImport("kernel32", CharSet = CharSet.Auto)]
         private static extern uint GetTickCount();
 
-        private Action<LogMessage> _LogDataCallBack;
+        private Action<LogMessage> LogDataCallBack;
 
         public uint NewTime
         {
@@ -193,7 +194,7 @@ public class OMRonTcpFinsService
                 }
                 catch (System.Exception ex)
                 {
-                   MyLogTool.Log("Omron TCPFINS 异常" + ex.Message);
+                   LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, "Omron TCPFINS 异常" + ex.Message));
                 }
             }
         }
@@ -367,7 +368,7 @@ public class OMRonTcpFinsService
             {
                 _lastError = ex.Message;
                 Close();
-                MyLogTool.Log("Omron TCPFINS SendAndGetRes 异常" + ex.Message);
+                LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR,"Omron TCPFINS SendAndGetRes 异常" + ex.Message));
                 return false;
             }
             return true;
@@ -388,7 +389,7 @@ public class OMRonTcpFinsService
                 }
                 catch (Exception ex)
                 {
-                    MyLogTool.Log(ex.Message);
+                    LogDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, ex.Message));
                     return false;
                 }
             }
@@ -403,7 +404,7 @@ public class OMRonTcpFinsService
         {
             this._ping = new Ping();
             this._endPoint = new IPEndPoint(0, 0);
-            this._LogDataCallBack = logDataCallBack;
+            this.LogDataCallBack = logDataCallBack;
         }
          /// <summary>
         /// set ip and port
@@ -599,9 +600,9 @@ public class OMRonTcpFinsService
             {
                 string msg = string.Format("Sending error. (Expected bytes: {0}  Sent: {1})"
                                             , cmdLen, bytesSent);
-                _LogDataCallBack?.Invoke( new LogMessage()
+                LogDataCallBack?.Invoke( new LogMessage()
                 {
-                    _LogType = LogType.Warm,
+                    _LogType = LogType.WARN,
                     message = msg,
                 });
                 
@@ -631,9 +632,9 @@ public class OMRonTcpFinsService
             {
                 string msg = string.Format("Receiving error. (Expected: {0}  Received: {1})"
                                             , respLen, bytesRecv);
-               _LogDataCallBack?.Invoke(new LogMessage()
+               LogDataCallBack?.Invoke(new LogMessage()
                {
-                   _LogType = LogType.Warm,
+                   _LogType = LogType.WARN,
                    message = msg
                });
             }

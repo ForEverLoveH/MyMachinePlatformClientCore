@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO.Ports; 
 using NModbus;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 
 
 namespace MyMachinePlatformClientCore.Service.ModbusService
@@ -66,13 +67,13 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
                 var factory = new ModbusFactory();
                 rtuMaster = factory.CreateRtuMaster((NModbus.IO.IStreamResource)SPort);
                 IsConnection = true;
-                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success, $"串口{PortName}连接成功"));
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, $"串口{PortName}连接成功"));
                 return true;
             }
             catch (Exception ex)
             {
                 IsConnection = false;
-                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"串口{PortName}连接失败,异常信息为{ex.Message}"));
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"串口{PortName}连接失败,异常信息为{ex.Message}"));
                 return false;
             }
         }
@@ -133,7 +134,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             }
             catch (Exception e)
             {
-                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"往串口{portName}写入数据失败,异常信息为{e.Message}"));
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"往串口{portName}写入数据失败,异常信息为{e.Message}"));
                 return; 
             }
         }
@@ -179,7 +180,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusService
             }
             catch (Exception e)
             {
-                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error, $"从串口{portName}读取数据失败,异常信息为{e.Message}"));
+                _logDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"从串口{portName}读取数据失败,异常信息为{e.Message}"));
             }
             return (coilsBuffer, registerBuffer);
         }

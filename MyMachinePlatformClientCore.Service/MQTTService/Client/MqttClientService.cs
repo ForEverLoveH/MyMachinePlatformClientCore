@@ -7,6 +7,7 @@ using MQTTnet;
  
 using MyMachinePlatformClientCore.IService.IMqttService;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 using MyMachinePlatformClientCore.Service.message_router;
 
 namespace MyMachinePlatformClientCore.Service.MQTTService;
@@ -167,7 +168,7 @@ public class MqttClientService:IMqttClientService
         string message = "MQTT 客户端已连接";
         LogMessageCallBack?.Invoke( new LogMessage()
         {
-            _LogType = LogType.Info,
+            _LogType = LogType.INFO,
             message = message,
         });
         // 订阅主题
@@ -182,7 +183,7 @@ public class MqttClientService:IMqttClientService
                 LogMessageCallBack?.Invoke( new LogMessage()
                 {
                     message = message,
-                    _LogType = LogType.Success,
+                    _LogType = LogType.INFO,
                 } );
             }
         }
@@ -197,7 +198,7 @@ public class MqttClientService:IMqttClientService
         LogMessageCallBack?.Invoke(new LogMessage()
         {
             message = message,
-            _LogType = LogType.Warm,
+            _LogType = LogType.WARN,
         });
         if (currentReconnectCout < maxReconnectCount)
         {
@@ -206,7 +207,7 @@ public class MqttClientService:IMqttClientService
             LogMessageCallBack?.Invoke(new LogMessage()
             {
                 message = message,
-                _LogType = LogType.Info,
+                _LogType = LogType.INFO,
             });
             await Task.Delay(2000); // 等待 2 秒后尝试重连
             await StartService();
@@ -216,7 +217,7 @@ public class MqttClientService:IMqttClientService
             LogMessageCallBack?.Invoke(   new LogMessage()
             {
                 message = "达到最大重连次数，停止重连",
-                _LogType = LogType.Warm,
+                _LogType = LogType.ERROR,
             });
         }
     }
@@ -231,7 +232,7 @@ public class MqttClientService:IMqttClientService
          RecieveMessageCallBack?.Invoke(message);
          LogMessageCallBack?.Invoke(  new LogMessage()
          {
-             _LogType = LogType.Info,
+             _LogType = LogType.INFO,
              message = $"收到消息：主题 {topic}，内容 {message}"
          });
     }
@@ -250,7 +251,7 @@ public class MqttClientService:IMqttClientService
               LogMessageCallBack?.Invoke(new LogMessage()
               {
                  message = message,
-                 _LogType = LogType.Success
+                 _LogType = LogType.INFO
               });
               return true;  
           }return false;
@@ -267,7 +268,7 @@ public class MqttClientService:IMqttClientService
             LogMessageCallBack?.Invoke(new LogMessage()
             {
                 message = "MQTT 客户端已停止",
-                _LogType = LogType.Warm
+                _LogType = LogType.WARN
             });
             if(IsConnected)isConnected = false;
         }
@@ -291,7 +292,7 @@ public class MqttClientService:IMqttClientService
                 LogMessageCallBack?.Invoke(new LogMessage()
                 {
                     message = $"消息发送成功: {message}",
-                    _LogType = LogType.Success,
+                    _LogType = LogType.INFO,
                 });
             }
             else
@@ -299,7 +300,7 @@ public class MqttClientService:IMqttClientService
                 LogMessageCallBack?.Invoke(new LogMessage()
                 {
                     message = $"消息发送失败: {publishResult.ReasonCode}",
-                    _LogType = LogType.Warm
+                    _LogType = LogType.ERROR
                 });
             }
         }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.FTPService;
 using MyMachinePlatformClientCore.Service.JsonService;
+using MyMachinePlatformClientCore.Service.LogService;
 
 namespace MyMachinePlatformClientCore.Service.Managers
 {

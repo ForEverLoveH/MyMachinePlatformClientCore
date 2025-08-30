@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using Google.Protobuf;
 using MyMachinePlatformClientCore.Common.TcpService.Server;
+using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter;
 using MyMachinePlatformClientCore.Service.ProtobufService;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace MyMachinePlatformClientCore.Service ;
 public class CTcpService:TcpService
 {
 
+    private Action<LogMessage> LogMessageCallBack;
     /// <summary>
     /// 
     /// </summary>
@@ -23,6 +25,10 @@ public class CTcpService:TcpService
     public CTcpService(IPAddress ipAddress, int port) : base(ipAddress, port)
     {
         
+    }
+    public CTcpService(IPAddress ipAddress, int port,Action<LogMessage> logMessageCallBack) : this(ipAddress, port)
+    {
+
     }
 
     public CTcpService(string ipaddress, int port) : base(ipaddress, port)
@@ -43,7 +49,7 @@ public class CTcpService:TcpService
     /// <returns></returns>
     protected override TcpSession CreateSession()
     {
-        return new CTcpSession(this);
+        return new CTcpSession(this, LogMessageCallBack);
     }
     /// <summary>
     /// 

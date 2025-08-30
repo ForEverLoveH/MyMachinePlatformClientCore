@@ -12,13 +12,15 @@ namespace MyMachinePlatformClientCore.Service.OMRonService;
 
 public class OMRonEIPService
 {
-    public OMRonEIPService()
+    private Action<LogMessage > LogMessageCallBack;
+    public OMRonEIPService(Action<LogMessage> logMessageCallBack)
     {
         this._ping = new Ping();
 
         // EndPoint parametres
         //
         this._endPoint = new IPEndPoint(0, 0);
+        LogMessageCallBack = logMessageCallBack;
     }
     #region  变量注册
 
@@ -289,7 +291,7 @@ public class OMRonEIPService
         {
             if (!isImmeTaskCountOut)
             {
-                MyLogTool.Warn(string.Format("Omron EIP 异常err,m_immeTaskList.Count大于80：{0}", m_immeTaskList.Count));
+                LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR,string.Format("Omron EIP 异常err,m_immeTaskList.Count大于80：{0}", m_immeTaskList.Count)));
                 isImmeTaskCountOut = true;
             }
 
@@ -367,7 +369,7 @@ public class OMRonEIPService
             {
                 if (!isPeriodTaskCountOut)
                 {
-                    MyLogTool.Warn(string.Format("Omron EIP 异常err,m_periodTaskList.Count大于80：{0}", m_periodTaskList.Count));
+                    //MyLogTool.Warn(string.Format("Omron EIP 异常err,m_periodTaskList.Count大于80：{0}", m_periodTaskList.Count));
                     isPeriodTaskCountOut = true;
                 }
 
@@ -405,7 +407,7 @@ public class OMRonEIPService
             TimeNum = stime.ElapsedMilliseconds;
             if (TimeNum > 1000)//一个周期超过1s时，打印日志
             {
-               MyLogTool.Log(string.Format("Omron EIP 异常err,m_periodTaskList周期任务执行周期超过1s：{0}，任务条数：{1}，最大超时变量：{2}，端口号：{3}", TimeNum, m_periodTaskList.Count, MaxTag, this.BindPort));
+               LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("Omron EIP 异常err,m_periodTaskList周期任务执行周期超过1s：{0}，任务条数：{1}，最大超时变量：{2}，端口号：{3}", TimeNum, m_periodTaskList.Count, MaxTag, this.BindPort)));
             }
             Monitor.Exit(m_critSecPeriodList);
         }
@@ -709,12 +711,12 @@ public class OMRonEIPService
                 catch (Exception)
                 { }
 
-                MyLogTool.Log(string.Format("PLC连接端口p{0}-第{1}次连接", BindPort, m_ThreadConNum++));
+                LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.FATAL, string.Format("PLC连接端口p{0}-第{1}次连接", BindPort, m_ThreadConNum++)));
                 return Connected;
             }
             catch (Exception ex)
             {
-                MyLogTool.Log(string.Format("PLC连连接失败，err{0}", ex.ToString()));
+                LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("PLC连连接失败，err{0}", ex.ToString())));
                 return false;
             }
         }
@@ -857,7 +859,7 @@ public class OMRonEIPService
                     bool isReadOK = GetReadVelue(pTask, rcv1);
                     if (!isReadOK)
                     {
-                       MyLogTool.Warn(string.Format("PLC驱动err,{0}异常:{1}", readOrWrite, pTask.m_strTag));
+                       LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("PLC驱动err,{0}异常:{1}", readOrWrite, pTask.m_strTag)));
                         return false;
                     }
                 }
@@ -878,7 +880,7 @@ public class OMRonEIPService
                                 if (!isWriteNG)
                                 {
                                     isWriteNG = true;
-                                    MyLogTool.Warn(string.Format("PLC驱动err,{0}异常:{1}", readOrWrite, pTask.m_strTag));
+                                    LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("PLC驱动err,{0}异常:{1}", readOrWrite, pTask.m_strTag)));
                                 }
                                 return false;
                             }
@@ -889,7 +891,7 @@ public class OMRonEIPService
                         }
                         catch (Exception ex)
                         {
-                            MyLogTool.Warn(string.Format("PLC驱动err,{0}异常:{1},ex:{2}", readOrWrite, pTask.m_strTag, ex.ToString()));
+                            LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("PLC驱动err,{0}异常:{1},ex:{2}", readOrWrite, pTask.m_strTag, ex.ToString())));
                         }
                     }
                 }
@@ -898,7 +900,7 @@ public class OMRonEIPService
             }
             catch (Exception ex)
             {
-                MyLogTool.Log(string.Format("PLC驱动err,{0}异常:{1},ex:{2}", readOrWrite, pTask.m_strTag, ex.ToString()));
+                LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, string.Format("PLC驱动err,{0}异常:{1},ex:{2}", readOrWrite, pTask.m_strTag, ex.ToString())));
                 return false;
             }
             #endregion

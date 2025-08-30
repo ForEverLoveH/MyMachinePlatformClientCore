@@ -17,6 +17,12 @@ public class CUdpServer: UdpServer
     { 
         this.isjson = isJson;
     }
+    private Action<LogMessage> logMessageCallBack;
+    public CUdpServer(IPAddress address, int port, Action<LogMessage> logMessageCallBack,bool isJson = false) : this(address, port,isJson)
+    {
+        this.logMessageCallBack = logMessageCallBack;
+    }
+
     public CUdpServer(string address,int port):base(address,port) { }
 
     protected override void OnStarted()
@@ -59,7 +65,7 @@ public class CUdpServer: UdpServer
                     byte[] messages = new byte[messageCode.Length - 2];
                     Array.Copy(messageCode, 0, messages, 0, messages.Length);
                     string mess = Encoding.UTF8.GetString(messages);
-                    MyLogTool.ColorLog(MyLogColor.Green, string.Format("{0}:{1}", "收到客户端json 数据", mess));
+                    logMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO, string.Format("{0}:{1}", "收到客户端json 数据", mess)));
                 }
             }
         }

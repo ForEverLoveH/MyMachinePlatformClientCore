@@ -473,7 +473,7 @@ namespace MyMachinePlatformClientCore.Service.ModbusDriver.ModbusServer
                     UpdateReadWord(AreaReadModbusTCPServerTpye.ReadCoil, startAddress, (short)updateData);
                     SendMsg(data, info);
                     break;
-                    break;
+                   
                 case 0x06://写单个保持寄存器40001-49999字操作(单个)****功能码06H
                     startAddress = (uint)data[8] * 256 + data[9];   //起始地址
                     updateData = data[10] * 256 + data[11];             //数据

@@ -51,6 +51,11 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter
         {
             get { return isRunning; }
         }
+        private Action<LogMessage> LogMessageCallBack;
+        public ClientJsonMessageRouter(Action<LogMessage> logMessageCallBack)
+        {
+            this.LogMessageCallBack = logMessageCallBack;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -136,7 +141,7 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter
             }
             catch (Exception ex)
             {
-                MyLogTool.ColorLog(MyLogColor.Red, "消息处理发生异常，异常信息为：" + ex.Message);
+              LogMessageCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, "消息处理发生异常，异常信息为：" + ex.Message));
                 
             }
             finally

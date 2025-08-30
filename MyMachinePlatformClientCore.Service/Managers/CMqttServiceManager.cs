@@ -1,6 +1,7 @@
 using MyMachinePlatformClientCore.IService.IMqttService;
 using MyMachinePlatformClientCore.Log.MyLogs;
 using MyMachinePlatformClientCore.Service.JsonService;
+using MyMachinePlatformClientCore.Service.LogService;
 using MyMachinePlatformClientCore.Service.MQTTService;
 
 namespace MyMachinePlatformClientCore.Service.Managers;

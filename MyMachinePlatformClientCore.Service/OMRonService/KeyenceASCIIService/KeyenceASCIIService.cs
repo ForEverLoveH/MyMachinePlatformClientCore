@@ -367,7 +367,7 @@ namespace MyMachinePlatformClientCore.Service.OMRonService ;
                 }
                 catch (System.Exception ex)
                 {
-                  MyLogTool.Log("PLC 异常:" + ex.ToString());
+                  
                 }
             }
         }

@@ -2,6 +2,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using MyMachinePlatformClientCore.IService.IRedisService;
 using MyMachinePlatformClientCore.Log.MyLogs;
+using MyMachinePlatformClientCore.Service.LogService;
 using StackExchange.Redis;
 
 namespace MyMachinePlatformClientCore.Service.RedisService;
@@ -87,7 +88,7 @@ public class RedisService : IRedisService, IDisposable
             {
                 var src = _connection.GetSubscriber();
                 this._subscriber = src;
-                _logMessageDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Success,"启动Redis服务成功"));
+                _logMessageDataCallBack?.Invoke(LogMessage.SetMessage(LogType.INFO,"启动Redis服务成功"));
                 _database = _connection.GetDatabase();
                 
             }
@@ -95,7 +96,7 @@ public class RedisService : IRedisService, IDisposable
         }
         catch (Exception e)
         {
-            _logMessageDataCallBack?.Invoke(LogMessage.SetMessage(LogType.Error,"启动Redis服务失败失败的异常信息为："+e.Message));
+            _logMessageDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR,"启动Redis服务失败失败的异常信息为："+e.Message));
             return;
         }
         
