@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "客户端", "客户端", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMachinePlatformClientCore.Models", "MyMachinePlatformClientCore.Models\MyMachinePlatformClientCore.Models.csproj", "{3B97CDC9-3616-4B17-874A-E729E2B94FF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMachinePlatformClientCore.Rpc", "MyMachinePlatformClientCore.Rpc\MyMachinePlatformClientCore.Rpc.csproj", "{5274DEBB-5EED-4C92-9D72-7A9FAEDD3643}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{3B97CDC9-3616-4B17-874A-E729E2B94FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B97CDC9-3616-4B17-874A-E729E2B94FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B97CDC9-3616-4B17-874A-E729E2B94FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5274DEBB-5EED-4C92-9D72-7A9FAEDD3643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5274DEBB-5EED-4C92-9D72-7A9FAEDD3643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5274DEBB-5EED-4C92-9D72-7A9FAEDD3643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5274DEBB-5EED-4C92-9D72-7A9FAEDD3643}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,5 +77,6 @@ Global
 		{9F97DCA9-D6B8-4128-AC0D-5C7A50E3CC42} = {0F256A84-CC68-4E34-8002-73C225D2B23A}
 		{0F256A84-CC68-4E34-8002-73C225D2B23A} = {4CF8B49D-4606-42A6-9252-0D1320D56457}
 		{3B97CDC9-3616-4B17-874A-E729E2B94FF0} = {0F256A84-CC68-4E34-8002-73C225D2B23A}
+		{5274DEBB-5EED-4C92-9D72-7A9FAEDD3643} = {0E5AD838-0148-4EBB-9841-EEF9C5819834}
 	EndGlobalSection
 EndGlobal

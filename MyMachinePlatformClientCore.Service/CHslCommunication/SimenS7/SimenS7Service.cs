@@ -543,16 +543,17 @@ public class SimenS7Service : IPLCService, IDisposable
             return false;
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public void Dispose()
     {
         StopService();
     }
 }
 
-     
-        
-         
-        
 
-     
+
+
+
+
