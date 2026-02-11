@@ -42,7 +42,6 @@ namespace MyMachinePlatformClientCore.Service.LogService
 
         public void LogInfo(string message)
         {
-           
             CLogService.Info("Info").Info(message);
         }
 

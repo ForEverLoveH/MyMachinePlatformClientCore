@@ -17,7 +17,8 @@ public partial class App : PrismApplication
     /// </summary>
     /// <param name="shell"></param>
     protected override void InitializeShell(Window shell)
-    {
+    { 
+        
         var login = Container.Resolve<LoginWindow>();
         var isLogin = login.ShowDialog();
         if (isLogin == true)
@@ -36,10 +37,8 @@ public partial class App : PrismApplication
     /// <param name="containerRegistry"></param>
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        MyIOCContainerManagers managers = new MyIOCContainerManagers(containerRegistry);
-        managers.RegisterInstance();
-        managers.RegisterSingleton();
-        managers.RegisterType();
+        AbpBootstrapper.Create<MyAbpModule>();
+        
     }
     /// <summary>
     /// 

@@ -18,4 +18,8 @@
       <ProjectReference Include="..\MyMachinePlatformClientCore.Log\MyMachinePlatformClientCore.Log.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="IPLC\" />
+    </ItemGroup>
+
 </Project>

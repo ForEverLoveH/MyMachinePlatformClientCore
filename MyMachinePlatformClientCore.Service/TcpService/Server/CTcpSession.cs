@@ -128,6 +128,9 @@ namespace MyMachinePlatformClientCore.Service
 
         }
 
+
+
+
         protected override void OnError(SocketError error)
         {
 
