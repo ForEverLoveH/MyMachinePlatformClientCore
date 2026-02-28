@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore.Summer.Common
 {
-    public interface IAutomatic : IObject, IRecipeObject
+    public interface IAutomatic : IObject,ISuportInitialization
     {
         /// <summary>说明</summary>
         string Desc { get; set; }

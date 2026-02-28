@@ -15,7 +15,7 @@ namespace MyMachinePlatformClientCore.Summer
     /// <summary>
     /// 
     /// </summary>
-    public abstract class PLCBase:Automatic, IPLC, IAutomatic,IDevice,IObject
+    public abstract class PLCBase:Automatic, IPLC, IAutomatic,IDevice 
     {
         private IReadWriteNet _client;
         private bool _isConnected;

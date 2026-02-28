@@ -17,4 +17,10 @@
       <ProjectReference Include="..\MyMachinePlatformClientCore.Service\MyMachinePlatformClientCore.Service.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="CustomAttribute\" />
+      <Folder Include="Events\" />
+      <Folder Include="TCP\" />
+    </ItemGroup>
+
 </Project>

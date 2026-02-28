@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 using MyMachinePlatformClientCore.Managers;
-using MyMachinePlatformClientCore.Summer.MyIOCContainer;
+
 using MyMachinePlatformClientCore.Views;
 
 namespace MyMachinePlatformClientCore;
@@ -10,7 +10,7 @@ namespace MyMachinePlatformClientCore;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : PrismApplication
+public partial class App : Prism.Unity.PrismApplication
 {
     /// <summary>
     /// 
@@ -37,7 +37,7 @@ public partial class App : PrismApplication
     /// <param name="containerRegistry"></param>
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        AbpBootstrapper.Create<MyAbpModule>();
+        
         
     }
     /// <summary>

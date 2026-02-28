@@ -21,7 +21,11 @@ namespace MyMachinePlatformClientCore.Summer.PLC
         /// 
         /// </summary>
         private OmronFinsNetOption option;
-        public OmronFinsNetOption Option { get =>option; set => option = value; } 
+        public OmronFinsNetOption Option { get =>option;  set=> option=value; }
+        public OmronFinsNetPLC(OmronFinsNetOption option)
+        {
+            this.option = option;
+        }
         /// <summary>
         /// 
         /// </summary>

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore.Summer.Common
 {
-    public class Automatic : IAutomatic, IObject, IRecipeObject
+    public class Automatic : IAutomatic, IObject 
     {
         protected Automatic()
         {
-            this.StatusAlarms = (IList<StatusAlarm>)new List<StatusAlarm>();
-            this.InitalizeAlarms();
+            
+           
         }
         /// <summary>日志记录器。</summary>
         public ILogger Logger { get; set; }
@@ -22,21 +22,12 @@ namespace MyMachinePlatformClientCore.Summer.Common
        
         public IServiceProvider Service { get; set; }
 
-        /// <summary>配方</summary>
-        public IRecipeProvider Recipe => this.Owner?.Recipe;
+         
 
         /// <inheritdoc />
         public string Desc { get; set; }
 
-        /// <summary>抛出报警信息。</summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="prop"></param>
-        /// <param name="value"></param>
-        /// <param name="callerName"></param>
-        protected void NotifyAlarm<T>(ref T prop, T value, [CallerMemberName] string callerName = null)
-        {
-            this.NotifyAlarm<T>(ref prop, value, callerName);
-        }
+        
 
         /// <inheritdoc />
         public string Id { get; set; }
@@ -44,12 +35,13 @@ namespace MyMachinePlatformClientCore.Summer.Common
         /// <inheritdoc />
         public string Name { get; set; }
 
-        /// <inheritdoc />
-        public IPart Owner { get; set; }
-
-        /// <inheritdoc />
-        public IList<StatusAlarm> StatusAlarms { get; }
+       
         public string ID { get  ; set  ; }
         public string Description { get ; set ; }
+
+        public async Task InitializeAsync()
+        {
+             
+        }
     }
 }

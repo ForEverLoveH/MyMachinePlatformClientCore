@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore.Summer.Options
 {
-    public interface IHasOption<T> where T : IOption
+    public interface IHasOption<T> where T : IOption, new()
     {
         T Option { get; set; }
     }

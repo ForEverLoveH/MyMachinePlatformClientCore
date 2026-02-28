@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore.Summer.Common
 {
-    public interface IRecipe : IEnumerable<RecipeItem>, IEnumerable, IRecipeProvider
+    public interface IRecipe : IEnumerable<RecipeItem>, IEnumerable 
     {
         /// <summary>获取指定的配方配置</summary>
         /// <typeparam name="T"></typeparam>

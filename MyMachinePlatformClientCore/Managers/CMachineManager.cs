@@ -16,7 +16,7 @@ using MyMachinePlatformClientCore.Service.HttpService;
 using MyMachinePlatformClientCore.Service.LogService;
 using MyMachinePlatformClientCore.Service.message_router;
 using MyMachinePlatformClientCore.Service.MessageRouter.JsonMessageRouter;
-using MyMachinePlatformClientCore.Service.ModbusService;
+ 
 using MyMachinePlatformClientCore.Service.OMRonService;
 using MyMachinePlatformClientCore.Service.SqlSugarService;
 using System.Windows.Media;
@@ -119,119 +119,10 @@ namespace MyMachinePlatformClientCore.Managers
 
 
         #region Modbus相关
-        /// <summary>
-        /// 
-        /// </summary>
-        private CMyModbusServiceManagers _modbusRTUServiceManager;
-        /// <summary>
-        /// 
-        /// </summary>
-        
-        private CMyModbusServiceManagers _modbusTCPServiceManager;
+       
 
         
-        #region  modbusRTU相关
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="PortName"></param>
-        /// <param name="BaudRate"></param>
-        /// <param name="DataBits"></param>
-        /// <param name="StopBits"></param>
-        /// <param name="Parity"></param>
-        /// <param name="WriteTimeout"></param>
-        /// <param name="ReadTimeout"></param>
-        public void StartModbusRTUService(string PortName, int BaudRate, int DataBits,
-            System.IO.Ports.StopBits StopBits, System.IO.Ports.Parity Parity, int WriteTimeout = 200, int ReadTimeout = 200)
-        {
-             
-                _modbusRTUServiceManager = new CMyModbusServiceManagers(HandleCurrentLogCallBack);
-                _modbusRTUServiceManager.StartMyModbusRTUService(PortName, BaudRate, DataBits, StopBits, Parity,
-                    WriteTimeout, ReadTimeout);
-            
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsModbusRTUServiceConnected => _modbusRTUServiceManager?.IsConnection;
-        /// <summary>
-        /// 
-        /// </summary>
-        public void StopModbusRTUService()
-        {
-            if (_modbusRTUServiceManager != null)
-            {
-                _modbusRTUServiceManager.StopService();
-            }
-        }
-        /// <summary>
-        /// 写入
-        /// </summary>
-        /// <param name="functionCode">功能码类型</param>
-        /// <param name="slaveAddress">站地址</param>
-        /// <param name="startAddress">位置,从0开始</param>
-        /// <param name="coilsBuffer">线圈数据</param>
-        /// <param name="registerBuffer">寄存器数据</param> 
-        public async Task WriteModbusRTUData(FunctionCode functionCode, byte slaveAddress, ushort startAddress,
-            bool[]? coilsBuffer = null, ushort[]? registerBuffer = null) =>await  _modbusRTUServiceManager.WriteData(functionCode,slaveAddress, startAddress, coilsBuffer, registerBuffer); 
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="functionCode"></param>
-        /// <param name="slaveAddress"></param>
-        /// <param name="startAddress"></param>
-        /// <param name="numberOfPoints"></param>
-        /// <returns></returns>
-        public async Task<(bool[]?, ushort[]?)> ReadModbusRTUData(FunctionCode functionCode, byte slaveAddress,
-            ushort startAddress, ushort numberOfPoints) => await  _modbusRTUServiceManager.ReadData(functionCode,slaveAddress, startAddress, numberOfPoints);
-        
-        #endregion
-
-        #region   modbusTCP相关
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ipaddress"></param>
-        /// <param name="port"></param>
-        public void StartModbusTcpServer(string ipaddress, int port)
-        {
-            if (_modbusTCPServiceManager == null)
-            {
-                _modbusTCPServiceManager = new CMyModbusServiceManagers(HandleCurrentLogCallBack
-                );
-                _modbusTCPServiceManager.StartMyModbusTcpService(ipaddress, port);
-            }
-        }
-        
-        public void StopModbusTcpServer()=> _modbusTCPServiceManager.StopService();
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool? IsModbusTcpServiceConnected => _modbusTCPServiceManager?.IsConnection;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="functionCode"></param>
-        /// <param name="slaveAddress"></param>
-        /// <param name="startAddress"></param>
-        /// <param name="coilsBuffer"></param>
-        /// <param name="registerBuffer"></param>
-        public async Task WriteModbusTcpData(FunctionCode functionCode, byte slaveAddress, ushort startAddress,
-            bool[]? coilsBuffer = null, ushort[]? registerBuffer = null) =>await  _modbusTCPServiceManager.WriteData(functionCode,slaveAddress, startAddress, coilsBuffer, registerBuffer); 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="functionCode"></param>
-        /// <param name="slaveAddress"></param>
-        /// <param name="startAddress"></param>
-        /// <param name="numberOfPoints"></param>
-        /// <returns></returns>
-        public async Task<(bool[]?, ushort[]?)> ReadModbusTcpData(FunctionCode functionCode, byte slaveAddress,
-            ushort startAddress, ushort numberOfPoints) => await _modbusTCPServiceManager.ReadData(functionCode,slaveAddress, startAddress, numberOfPoints);
-
-        #endregion
+       
 
 
         #endregion
