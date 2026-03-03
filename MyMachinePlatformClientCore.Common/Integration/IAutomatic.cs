@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore.Common.Integration
 {
-    public interface IAutomatic : IObject,ISuportInitialization
+    public interface IAutomatic : IObject,ISuportInitialization,IDevice
     {
         /// <summary>说明</summary>
         string Desc { get; set; }

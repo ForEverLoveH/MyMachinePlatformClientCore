@@ -25,36 +25,7 @@ namespace MyMachinePlatformClientCore.Common.Integration
     /// <typeparam name="TArgs"></typeparam>
     public abstract class BaseEquipment<TOption, TArgs> : Automatic, IEquipment<TOption, TArgs> where TOption : IOption where TArgs : EquipmentRecieveDataArgs
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsConnected { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-
-        public TOption Option { get  ; set ; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public EventHandler<TArgs> RecieveDataCallBack { get  ; set ; }
-        /// <summary>
-        /// 
-        /// </summary>
-
-        public event Action<IDevice> IsConnectedChanged;
-        /// <summary>
-        /// 
-        /// </summary>
-
-        public void Connect()
-        {
-            
-        }
-
-        public void Disconnect()
-        {
-             
-        }
+        public EventHandler<TArgs> RecieveDataCallBack { get ; set  ; }
+        public TOption Option { get ; set ; }
     }
 }

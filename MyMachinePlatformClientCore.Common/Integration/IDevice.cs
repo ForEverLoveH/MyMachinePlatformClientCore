@@ -17,4 +17,29 @@ namespace MyMachinePlatformClientCore.Common.Integration
 
         void Disconnect();
     }
+    public class Device : IDevice
+    {
+        private bool _isConnected;
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                _isConnected = value;
+                IsConnectedChanged?.Invoke(this);
+            }
+        }
+
+        public event Action<IDevice> IsConnectedChanged;
+
+        public virtual void Connect()
+        {
+             
+        }
+
+        public virtual void Disconnect()
+        {
+             
+        }
+    }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyMachinePlatformClientCore .Common.Integration
 {
-    public class Automatic : IAutomatic, IObject 
+    public class Automatic:Device,IAutomatic,IObject
     {
         protected Automatic()
         {
@@ -19,7 +19,7 @@ namespace MyMachinePlatformClientCore .Common.Integration
         
 
        
-        public IServiceProvider Service { get; set; }
+        
 
          
 
