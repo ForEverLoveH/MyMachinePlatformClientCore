@@ -33,7 +33,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MyMachinePlatformClientCore.Common\MyMachinePlatformClientCore.Common.csproj" />
-      <ProjectReference Include="..\MyMachinePlatformClientCore.IService\MyMachinePlatformClientCore.IService.csproj" />
       <ProjectReference Include="..\MyMachinePlatformClientCore.Log\MyMachinePlatformClientCore.Log.csproj" />
     </ItemGroup>
 

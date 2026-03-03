@@ -1,8 +1,10 @@
 ﻿using HslCommunication;
 using HslCommunication.Profinet.Siemens;
 using Microsoft.Extensions.DependencyInjection;
-using MyMachinePlatformClientCore.Summer.Common;
-using MyMachinePlatformClientCore.Summer.Enums;
+using MyMachinePlatformClientCore.Common.Integration;
+using MyMachinePlatformClientCore.Common.Options;
+ 
+ 
 using MyMachinePlatformClientCore.Summer.Options;
 using System;
 using System.Collections.Generic;

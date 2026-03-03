@@ -12,6 +12,6 @@ namespace MyMachinePlatformClientCore.Service.MessageRouter.ProtoMessage
     {
         public IMessage message { get; set; }
 
-        public TcpClient tcpClient { get; set; }
+      //  public TcpClient tcpClient { get; set; }
     }
 }

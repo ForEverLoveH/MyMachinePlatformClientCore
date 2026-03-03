@@ -1,5 +1,7 @@
-﻿using MyMachinePlatformClientCore.Log.MyLogs;
-using MyMachinePlatformClientCore.Summer.Common;
+﻿using MyMachinePlatformClientCore.Common.Integration;
+using MyMachinePlatformClientCore.Common.Options;
+using MyMachinePlatformClientCore.Log.MyLogs;
+ 
 using MyMachinePlatformClientCore.Summer.Options;
 using NModbus;
 using System;
@@ -20,7 +22,7 @@ namespace MyMachinePlatformClientCore.Summer
     /// <summary>
     /// 
     /// </summary>
-    public class ModubsTcpMaster : Automatic, Summer. IModbusMaster,IHasOption<ModubsTcpMasterOption>
+    public class ModubsTcpMaster : Automatic,  IModbusMaster<ModubsTcpMasterOption>
     {
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace MyMachinePlatformClientCore.Summer
         /// <summary>
         /// 
         /// </summary>
-        private  NModbus. IModbusMaster tcpMaster;
+        private  NModbus.IModbusMaster tcpMaster;
         /// <summary>
         /// 
         /// </summary>

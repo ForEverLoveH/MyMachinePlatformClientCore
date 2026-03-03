@@ -1,7 +1,8 @@
 ﻿using HslCommunication;
 using HslCommunication.Core;
-using Microsoft.Extensions.Logging;
-using MyMachinePlatformClientCore.Summer.Common;
+ 
+using MyMachinePlatformClientCore.Common.Integration;
+ 
 using MyMachinePlatformClientCore.Summer.Options;
 using System;
 using System.Collections.Generic;

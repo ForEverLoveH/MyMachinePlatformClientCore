@@ -1,5 +1,7 @@
 ﻿using HslCommunication.ModBus;
-using MyMachinePlatformClientCore.Summer.Common;
+using MyMachinePlatformClientCore.Common.Integration;
+using MyMachinePlatformClientCore.Common.Options;
+ 
 using MyMachinePlatformClientCore.Summer.Options;
 using System;
 using System.Collections.Generic;

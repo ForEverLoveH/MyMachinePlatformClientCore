@@ -1,25 +1,17 @@
 using System.IO.Ports;
+using MyMachinePlatformClientCore.Common.Integration;
+using MyMachinePlatformClientCore.Common.Options;
 using MyMachinePlatformClientCore.Log.MyLogs;
-using MyMachinePlatformClientCore.Summer.Common;
 using MyMachinePlatformClientCore.Summer.Options;
 using NModbus;
 
-namespace MyMachinePlatformClientCore.Summer;
 
-
-    public class ModbusRTUMasterOption : SerialPortOption
-    {
-        public Parity Parity { get; set; }
-        public StopBits StopBits { get; set; }
-        public int WriteTimeout { get; set; }
-        public int ReadTimeout { get; set; }
-    }
-
-     
+namespace MyMachinePlatformClientCore.Summer
+{ 
     /// <summary>
     /// 
     /// </summary>
-    public class ModbusRTUMaster  : Automatic, IModbusMaster,IHasOption<ModbusRTUMasterOption>
+    public class ModbusRTUMaster : Automatic, IModbusMaster<ModbusRTUMasterOption>
     {
         private SerialPort SPort;
 
@@ -89,7 +81,7 @@ namespace MyMachinePlatformClientCore.Summer;
                 SPort.WriteTimeout = this.Option.WriteTimeout;
                 SPort.ReadTimeout = this.Option.ReadTimeout;
                 SPort.Open();
-               
+
                 var factory = new ModbusFactory();
                 rtuMaster = factory.CreateRtuMaster((NModbus.IO.IStreamResource)SPort);
                 isConnected = true;
@@ -109,11 +101,11 @@ namespace MyMachinePlatformClientCore.Summer;
         /// </summary>
         public void Disconnect()
         {
-            if (SPort == null)  return;
+            if (SPort == null) return;
             SPort.Close();
             if (rtuMaster is null) return;
             rtuMaster.Dispose();
-            isConnected= false;
+            isConnected = false;
             IsConnectedChanged?.Invoke(this);
         }
         /// <summary>
@@ -156,15 +148,15 @@ namespace MyMachinePlatformClientCore.Summer;
                             return;
                         await rtuMaster.WriteMultipleRegistersAsync(slaveAddress, startAddress, registerBuffer);
                         break;
-                     
+
                     default:
                         break;
                 }
             }
             catch (Exception e)
             {
-                LogMessageDataCallBack ?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"往串口{Option.PortName }写入数据失败,异常信息为{e.Message}"));
-                return; 
+                LogMessageDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"往串口{Option.PortName}写入数据失败,异常信息为{e.Message}"));
+                return;
             }
         }
         /// <summary>
@@ -174,7 +166,7 @@ namespace MyMachinePlatformClientCore.Summer;
         /// <param name="slaveAddress">站地址</param>
         /// <param name="startAddress">位置,从0开始</param>
         /// <param name="numberOfPoints">长度</param>
-        public virtual  async Task<(bool[]?, ushort[]?)> ReadData(FunctionCode functionCode, byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public virtual async Task<(bool[]?, ushort[]?)> ReadData(FunctionCode functionCode, byte slaveAddress, ushort startAddress, ushort numberOfPoints)
         {
             bool[]? coilsBuffer = null;//线圈数据
             ushort[]? registerBuffer = null;//寄存器数据
@@ -209,12 +201,12 @@ namespace MyMachinePlatformClientCore.Summer;
             }
             catch (Exception e)
             {
-                LogMessageDataCallBack ?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"从串口{Option.PortName}读取数据失败,异常信息为{e.Message}"));
+                LogMessageDataCallBack?.Invoke(LogMessage.SetMessage(LogType.ERROR, $"从串口{Option.PortName}读取数据失败,异常信息为{e.Message}"));
             }
             return (coilsBuffer, registerBuffer);
         }
-    
-
-
-    
     }
+
+
+    
+}

@@ -59,4 +59,9 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Managers\" />
+      <Folder Include="ViewModels\" />
+    </ItemGroup>
+
 </Project>
